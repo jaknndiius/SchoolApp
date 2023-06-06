@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.BiteCalculatorFragment">
+
+    <LinearLayout
+        android:id="@+id/headerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        android:orientation="vertical"
+        android:paddingTop="35dp"
+        android:paddingBottom="40dp"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bite_calculator"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textFontWeight="500"
+            android:textAlignment="center"
+            android:layout_marginBottom="60dp" />
+
+        <LinearLayout
+            android:id="@+id/stateLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp">
+
+            <LinearLayout
+                android:id="@+id/stringLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textFontWeight="300"
+                    android:text="@string/string_length"
+                    android:textSize="15dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/stringLength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textFontWeight="400"
+                    android:text="0자"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/biteLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textFontWeight="300"
+                    android:text="@string/bite_length"
+                    android:textSize="15dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/biteLength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textFontWeight="400"
+                    android:text="0"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/biteFormatLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginVertical="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="0dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:textFontWeight="300"
+                    android:text="자율"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_name" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textFontWeight="400"
+                    android:text="1500"
+                    android:textSize="12dp"
+                    android:textColor="@color/green"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_number" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_margin="3dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:textFontWeight="300"
+                    android:text="동아리"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_name" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textFontWeight="400"
+                    android:text="1500"
+                    android:textSize="12dp"
+                    android:textColor="@color/green"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_number" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_margin="3dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:textFontWeight="300"
+                    android:text="교과"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_name" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textFontWeight="400"
+                    android:text="2100"
+                    android:textSize="12dp"
+                    android:textColor="@color/green"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_number" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_margin="3dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:textFontWeight="300"
+                    android:text="개인"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_name" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textFontWeight="400"
+                    android:text="1500"
+                    android:textSize="12dp"
+                    android:textColor="@color/green"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_number" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginVertical="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="0dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:textFontWeight="300"
+                    android:text="진로"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_name" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textFontWeight="400"
+                    android:text="1500"
+                    android:textSize="12dp"
+                    android:textColor="@color/green"
+                    android:textAlignment="center"
+                    android:background="@drawable/bite_format_number" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextTextMultiLine"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="start|top"
+        android:hint="여기에 텍스트를 입력하세요"
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:textColor="@color/green"
+        android:textColorHint="@color/light_green"
+        android:translationZ="10dp"
+        android:translationY="-43dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

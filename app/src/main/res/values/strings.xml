@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SchoolApp</string>
+    <string name="app_title">ALLINONE</string>
+    <string name="app_subtitle">학교 생활의 모든 것</string>
+    <string name="home">홈</string>
+    <string name="timetable">시간표</string>
+    <string name="schedule">스케쥴</string>
+    <string name="bite_calculator">바이트 계산기</string>
+    <string name="string_length">글자수</string>
+    <string name="bite_length">바이트</string>
+</resources>

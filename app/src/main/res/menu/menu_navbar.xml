@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_home"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home" />
+
+    <item
+        android:id="@+id/menu_timetable"
+        android:title="@string/timetable"
+        android:icon="@drawable/ic_timetable" />
+
+    <item
+        android:id="@+id/menu_schedule"
+        android:title="@string/schedule"
+        android:icon="@drawable/ic_schedule" />
+
+    <item
+        android:id="@+id/menu_bite_calculator"
+        android:title="@string/bite_calculator"
+        android:icon="@drawable/ic_bite_calculator" />
+</menu>
