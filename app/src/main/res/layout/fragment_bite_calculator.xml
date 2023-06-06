@@ -243,7 +243,7 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_margin="20dp"
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/edittext_background_selector"
         android:gravity="start|top"
         android:hint="여기에 텍스트를 입력하세요"
         android:inputType="textMultiLine"
