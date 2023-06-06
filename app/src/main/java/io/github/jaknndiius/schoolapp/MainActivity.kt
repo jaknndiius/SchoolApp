@@ -1,12 +1,8 @@
 package io.github.jaknndiius.schoolapp
 
-import android.media.DrmInitData.SchemeInitData
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.github.jaknndiius.schoolapp.fragment.BiteCalculatorFragment
 import io.github.jaknndiius.schoolapp.fragment.HomeFragment
 import io.github.jaknndiius.schoolapp.fragment.ScheduleFragment
@@ -25,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.container, home).commit()
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigation.setOnNavigationItemSelectedListener {
-            when(it.itemId) {
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId) {
                 R.id.menu_home -> {
                     supportFragmentManager.beginTransaction().replace(R.id.container, home).commit()
                     return@setOnNavigationItemSelectedListener true
