@@ -7,10 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".fragment.ScheduleFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/headerLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="abc"
-        android:gravity="center|center"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        android:orientation="vertical"
+        android:padding="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textFontWeight="500"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

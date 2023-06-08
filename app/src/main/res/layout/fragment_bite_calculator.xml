@@ -11,7 +11,7 @@
         android:id="@+id/headerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background"
+        android:background="@drawable/background_reverse"
         android:orientation="vertical"
         android:paddingTop="35dp"
         android:paddingBottom="40dp"
