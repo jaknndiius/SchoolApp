@@ -1,36 +1,108 @@
 package io.github.jaknndiius.schoolapp
 
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.BoringLayout
 import android.util.Log
-import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.room.Room
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import io.github.jaknndiius.schoolapp.database.DatabaseHelper
+import io.github.jaknndiius.schoolapp.database.*
 import io.github.jaknndiius.schoolapp.fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     private val fragmentId = mapOf(0 to R.id.menu_home, 1 to R.id.menu_timetable, 2 to R.id.menu_schedule, 3 to R.id.menu_bite_calculator)
 
-    private var dbHelper: DatabaseHelper? = null
-    private var database: SQLiteDatabase? = null
-    private var databaseName = "MyDatabase"
-    private var tableName = "Timetable"
+    private val SUBJECT_DATABASE = "subject-database"
+    private val SUBJECT_TABLE_DATABASSE = "subject-table-database"
+
+    lateinit var subjectDatabase: SubjectDatabase
+    lateinit var subjectDao: SubjectDao
+
+    lateinit var subjectTableDatabase: SubjectTableDatabase
+    lateinit var subjectTableDao: SubjectTableDao
+
+    companion object {
+        lateinit var subjectManager: SubjectManager
+        lateinit var subjectTableManager: SubjectTableManager
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         hideActionBar()
 
+        subjectDatabase = Room.databaseBuilder(
+            applicationContext,
+            SubjectDatabase::class.java, SUBJECT_DATABASE
+        ).build()
+        subjectDao = subjectDatabase.subjectDao()
+
+        subjectTableDatabase = Room.databaseBuilder(
+            applicationContext,
+            SubjectTableDatabase::class.java, SUBJECT_TABLE_DATABASSE
+        ).build()
+        subjectTableDao = subjectTableDatabase.subjectTableDao()
+
+        subjectTableManager = SubjectTableManager()
+        subjectManager = SubjectManager()
+        CoroutineScope(Dispatchers.IO).launch {
+            subjectManager.define("문학1", "윤동희")
+            subjectManager.define("문학2", "신치훈")
+            subjectManager.define("문학3", "김병호")
+            subjectManager.define("인상", "윤동희")
+
+            subjectManager.define("영어1", "장인석")
+            subjectManager.define("영어2",  "이성훈")
+            subjectManager.define("영어3", "장인석")
+
+
+            subjectManager.define("수학1", "노현태")
+            subjectManager.define("수학2", "박진우")
+            subjectManager.define("수학3", "박진우")
+
+            subjectManager.define("물리", "황준식")
+            subjectManager.define("지학", "정희찬")
+
+            subjectManager.define("음악", "지세현")
+            subjectManager.define("체육", "박영덕")
+            subjectManager.define("한국사", "김진영")
+            subjectManager.define("미술", "권유정")
+            subjectManager.define("일본어", "김희인")
+
+            subjectManager.define("창체", "장인석")
+
+            
+            SubjectTableManager().addOrUpdate(WeekDay.MONDAY,
+                listOf("문학1", "영어2", "수학1", "창체", "수학2", "음악", "지학")
+            )
+            SubjectTableManager().addOrUpdate(WeekDay.TUESDAY,
+                listOf("물리", "물리", "수학3", "체육", "인상", "문학2", "영어1")
+            )
+            SubjectTableManager().addOrUpdate(WeekDay.WENDESDAY,
+                listOf("한국사", "수학1", "미술", "수학2", "창체", "창체", "창체")
+            )
+            SubjectTableManager().addOrUpdate(WeekDay.THURSDAY,
+                listOf("문학2", "수학2", "지학", "지학", "문학1", "일본어", "영어3")
+            )
+            SubjectTableManager().addOrUpdate(WeekDay.FRIDAY,
+                listOf("영어1", "문학3", "영어2", "창체", "물리", "수학1", "음악")
+            )
+        }
+
         val pager: ViewPager = findViewById(R.id.pager)
-        val adapter: Adapter = Adapter(supportFragmentManager)
+        val adapter = Adapter(supportFragmentManager)
         adapter.addItems(listOf(HomeFragment(), TimetableFragment(), ScheduleFragment(), BiteCalculatorFragment()))
         pager.adapter = adapter
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -38,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         pager.addOnPageChangeListener(object: OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
 
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 if(fragmentId[position] == R.id.menu_timetable) (adapter.getItem(position) as TimetableFragment).reload()
                 bottomNavigation.menu.findItem(fragmentId[position]?: R.id.menu_home).isChecked = true
@@ -70,6 +143,48 @@ class MainActivity : AppCompatActivity() {
         }
         fun addItems(items: Collection<Fragment>) {
             this.items.addAll(items)
+        }
+    }
+
+    inner class SubjectManager {
+        fun clear() {
+            subjectDao.getAll().forEach { subjectDao.delete(it)  }
+        }
+        fun getAll(): List<Subject> {
+            return subjectDao.getAll()
+        }
+        fun get(name: String): Subject {
+            return subjectDao.getAll().first { it.name == name }
+        }
+        fun isExist(name: String): Boolean {
+            return !subjectDao.getAll().none { it.name == name }
+        }
+        fun define(name: String, teacherName: String) {
+            if(isExist(name)) subjectDao.updateSubjects(Subject(name, teacherName))
+            else subjectDao.insertAll(Subject(name, teacherName))
+        }
+        fun delete(name: String) {
+            if(!isExist(name)) return
+            subjectDao.delete(get(name))
+        }
+    }
+    inner class SubjectTableManager {
+        fun clear() {
+            subjectTableDao.getAll().forEach { subjectTableDao.delete(it)  }
+        }
+        fun getAll(): List<SubjectTable> {
+            return subjectTableDao.getAll()
+        }
+        fun isExist(weekDay: WeekDay): Boolean {
+            return !subjectTableDao.getAll().none { it.uid == weekDay }
+        }
+        fun addOrUpdate(weekDay: WeekDay, subjectNames: List<String>) {
+            val subjects = arrayListOf<Subject>()
+            subjectNames.forEach {
+                if(SubjectManager().isExist(it)) subjects.add(SubjectManager().get(it))
+            }
+            if(isExist(weekDay)) subjectTableDao.updateSubjectTables(SubjectTable(weekDay, subjects))
+            else subjectTableDao.insertAll(SubjectTable(weekDay, subjects))
         }
     }
 }

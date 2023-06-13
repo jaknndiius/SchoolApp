@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.SchoolApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#D98989</item>
-        <item name="colorPrimaryVariant">#C31414</item>
+        <item name="colorPrimary">@color/light_green</item>
+        <item name="colorPrimaryVariant">@color/green</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryDark">#700000</item>
+        <item name="colorPrimaryDark">@color/dark_green</item>
 
         <item name="android:fontFamily">@font/nanum</item>
         <item name="fontFamily">@font/nanum</item>
 
         <item name="android:navigationBarColor">@color/transparent</item>
-        <item name="android:windowBackground">@drawable/background_dark</item>
+        <item name="android:windowBackground">@drawable/background</item>
     </style>
 </resources>

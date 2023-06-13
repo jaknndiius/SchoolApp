@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/body_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerLinearLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/back_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_back"
+            android:backgroundTint="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_generate_subject"
+            android:textAlignment="center"
+            android:textColor="@color/green"
+            android:textFontWeight="500"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/time_table_subject_background_bold"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout">
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="@string/subject_name"
+            android:textColor="@color/green"
+            android:textFontWeight="400"
+            android:textSize="14dp" />
+
+        <EditText
+            android:id="@+id/subject_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/transparent"
+            android:hint="@string/subject_name_typing"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:textColor="@color/green"
+            android:textColorHint="@color/light_green"
+            android:textFontWeight="300"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linerLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/time_table_subject_background_bold"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="@string/teacher_name"
+            android:textColor="@color/green"
+
+            android:textFontWeight="400"
+            android:textSize="14dp" />
+
+        <EditText
+            android:id="@+id/teacher_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/transparent"
+            android:hint="@string/teacher_name_typing"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:textColor="@color/green"
+            android:textColorHint="@color/light_green"
+            android:textFontWeight="300"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/generate_subject_button"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bottom_button"
+        android:text="@string/setting_generate_subject"
+        android:textFontWeight="400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linerLayout4" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
