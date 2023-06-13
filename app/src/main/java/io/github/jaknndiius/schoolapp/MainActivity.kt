@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             subjectManager.define("수학3", "박진우")
 
             subjectManager.define("물리", "황준식")
-            subjectManager.define("지학", "정희찬")
+            subjectManager.define("지구과학", "정희찬")
 
             subjectManager.define("음악", "지세현")
             subjectManager.define("체육", "박영덕")
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
             
             SubjectTableManager().addOrUpdate(WeekDay.MONDAY,
-                listOf("문학1", "영어2", "수학1", "창체", "수학2", "음악", "지학")
+                listOf("문학1", "영어2", "수학1", "창체", "수학2", "음악", "지구과학")
             )
             SubjectTableManager().addOrUpdate(WeekDay.TUESDAY,
                 listOf("물리", "물리", "수학3", "체육", "인상", "문학2", "영어1")
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                 listOf("한국사", "수학1", "미술", "수학2", "창체", "창체", "창체")
             )
             SubjectTableManager().addOrUpdate(WeekDay.THURSDAY,
-                listOf("문학2", "수학2", "지학", "지학", "문학1", "일본어", "영어3")
+                listOf("문학2", "수학2", "지구과학", "지구과학", "문학1", "일본어", "영어3")
             )
             SubjectTableManager().addOrUpdate(WeekDay.FRIDAY,
                 listOf("영어1", "문학3", "영어2", "창체", "물리", "수학1", "음악")
