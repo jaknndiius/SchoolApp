@@ -2,15 +2,8 @@ package io.github.jaknndiius.schoolapp.fragment.timetable
 
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.DialogInterface
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,34 +18,36 @@ import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
 import kotlinx.coroutines.*
 
-class TimetableManageSubjectFragment(
-    private val parent: TimetableFragment
+class ManageSubjectFragment(
+    private val timetableFragment: TimetableFragment
 ) : Fragment() {
 
     private var isSelectMod = false
 
     lateinit var binding: View
     lateinit var inflater: LayoutInflater
+    lateinit var editButton: EditButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = inflater.inflate(R.layout.fragment_timetable_setting_manage_subject, container, false)
+        binding = inflater.inflate(R.layout.timetable_setting_manage_subject, container, false)
         this.inflater = inflater
+        editButton = EditButton(binding.findViewById(R.id.edit_subject_layout))
+
         binding.setOnClickListener {
             leaveSelectMod()
         }
         setToBackButton()
-        setButtonToGenerate()
 
         reloadSubjects(false)
 
         return binding
     }
 
-    private fun reloadSubjects(animation: Boolean) {
+    private fun reloadSubjects(loadAnimation: Boolean) {
         val subjectLayout: LinearLayout = binding.findViewById(R.id.subject_layout)
         subjectLayout.removeAllViews()
         CoroutineScope(Dispatchers.IO).launch {
@@ -60,22 +55,19 @@ class TimetableManageSubjectFragment(
             withContext(Dispatchers.Main) {
                 var delay = 0L
                 subjects.forEach {
-                    val view = makeSubject(subjectLayout, it)
-                    if(animation) {
+                    val view = makeSubjectView(subjectLayout, it)
+                    if(loadAnimation) {
                         view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in).apply {
                             startOffset = delay
                             delay += 50 })}
                     subjectLayout.addView(view)
                 }
-                if(animation) {
-                binding.findViewById<LinearLayout>(R.id.generate_subject).startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in).apply {
-                    startOffset = delay
-                })}
+                if(loadAnimation) editButton.fadeIn(delay)
             }
         }
     }
 
-    private fun makeSubject(container: ViewGroup, subject: Subject): View {
+    private fun makeSubjectView(container: ViewGroup, subject: Subject): View {
         return inflater.inflate(R.layout.fragment_manage_subject, container, false).apply {
             contentDescription = "SubjectView"
             findViewById<TextView>(R.id.subject_name).text = subject.name
@@ -86,8 +78,10 @@ class TimetableManageSubjectFragment(
             }
             setOnClickListener {
                 if(isSelectMod) {
-                    val checkBox: CheckBox = findViewById(R.id.select_checkbox)
-                    checkBox.isChecked = !checkBox.isChecked
+                    findViewById<CheckBox?>(R.id.select_checkbox).apply {
+                        isChecked = !isChecked
+                    }
+                    editButton.reloadDeleteButton()
                 }
             }
         }
@@ -105,74 +99,42 @@ class TimetableManageSubjectFragment(
 
     private fun deleteCheckedSubjects() {
         CoroutineScope(Dispatchers.IO).launch {
-            var sum = 0
-            getAllCheckedSubjectViews().forEach {
+            val views = getAllCheckedSubjectViews()
+            views.forEach {
                 MainActivity.subjectManager.delete(it.findViewById<TextView>(R.id.subject_name).text.toString())
-                sum += 1
             }
             withContext(Dispatchers.Main) {
                 reloadSubjects(true)
                 leaveSelectMod()
-                Toast.makeText(context, "과목 ${sum}개를 삭제하였습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, getString(R.string.say_deleted_subjects_with_count, views.size), Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun deleteSubject() {
-        for(view in getAllCheckedSubjectViews()) {
-            AlertDialog.Builder(context)
-                .setMessage("체크한 모든 과목을 삭제하시겠습니까?")
-                .setPositiveButton("네", DialogInterface.OnClickListener { _, _ -> deleteCheckedSubjects() })
-                .setNegativeButton("아니요", null)
-                .show()
-            break
-        }
+    private fun alertDelete() {
+        AlertDialog.Builder(context)
+            .setMessage(getString(R.string.ask_really_delete))
+            .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ -> deleteCheckedSubjects() })
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
     }
 
     private fun setToBackButton() {
         binding.findViewById<TextView>(R.id.title).apply {
-            text = resources.getString(R.string.setting_manage_subject)
+            text = getString(R.string.setting_manage_subject)
             startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
         }
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
-            parent.openTimetableSetting(TimetableFragment.Direction.PREVIOUS)
+            timetableFragment.openTimetableSetting(TimetableFragment.Direction.PREVIOUS)
         }
     }
     private fun setToLeavingButton() {
         binding.findViewById<TextView>(R.id.title).apply {
-            text = resources.getString(R.string.select)
+            text = getString(R.string.select)
             startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
         }
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
             leaveSelectMod()
-        }
-    }
-
-    private fun setButtonToDelete() {
-        binding.findViewById<LinearLayout>(R.id.generate_subject).apply {
-            background = resources.getDrawable(R.drawable.time_table_subject_background_changed)
-            findViewById<AppCompatButton>(R.id.subject_merge_button).apply {
-                setTextColor(resources.getColor(R.color.red))
-                setText(R.string.delete_subject)
-                setOnClickListener {
-                    deleteSubject()
-                }
-                startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
-            }
-        }
-    }
-
-    private fun setButtonToGenerate() {
-        binding.findViewById<LinearLayout>(R.id.generate_subject).apply {
-            background = resources.getDrawable(R.drawable.time_table_subject_background)
-            findViewById<AppCompatButton>(R.id.subject_merge_button).apply {
-                setTextColor(resources.getColor(R.color.green))
-                setText(R.string.generate_subject)
-                setOnClickListener {
-                    this@TimetableManageSubjectFragment.parent.openSubjectGenerator(TimetableFragment.Direction.NEXT)
-                }
-                startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
-            }
         }
     }
 
@@ -181,7 +143,7 @@ class TimetableManageSubjectFragment(
         isSelectMod = true
 
         setToLeavingButton()
-        setButtonToDelete()
+        editButton.setModeToDelete()
 
         getAllSubjectViews().forEach {
             ObjectAnimator.ofFloat(it.findViewById(R.id.subject_name), "translationX", 100f).apply {
@@ -202,7 +164,7 @@ class TimetableManageSubjectFragment(
         isSelectMod = false
 
         setToBackButton()
-        setButtonToGenerate()
+        editButton.setModeToGenerate()
 
         getAllSubjectViews().forEach {
             ObjectAnimator.ofFloat(it.findViewById(R.id.subject_name), "translationX", 0f).apply {
@@ -213,6 +175,76 @@ class TimetableManageSubjectFragment(
             it.findViewById<CheckBox>(R.id.select_checkbox).apply {
                 visibility = View.GONE
                 startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out))
+            }
+        }
+    }
+
+    private enum class ButtonMod {DELETE, GENERATE}
+    inner class EditButton( private val buttonLayout: LinearLayout ) {
+
+        private val button: AppCompatButton = buttonLayout.findViewById(R.id.edit_subject_button)
+        private var buttonMode = ButtonMod.GENERATE
+        private var disabled = false
+
+        init {
+            setModeToGenerate()
+        }
+
+        private fun mergeButton(buttonBackground: Int, textColor: Int, buttonText: String) {
+            buttonLayout.apply {
+                background = resources.getDrawable(buttonBackground)
+            }
+            button.apply {
+                text = buttonText
+                setTextColor(resources.getColor(textColor))
+            }
+        }
+
+        fun fadeIn(startOffset: Long) {
+            buttonLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in).apply {
+                this.startOffset = startOffset
+            })
+        }
+
+        private fun enableDeleteButton(checkedCount: Int) {
+            disabled = false
+            mergeButton(R.drawable.time_table_subject_button_background_enabled, R.color.red, resources.getString(R.string.delete_subject_with_count, checkedCount))
+            buttonLayout.translationZ = 10F
+        }
+
+        private fun disableDeleteButton() {
+            disabled = true
+            mergeButton(R.drawable.time_table_subject_button_background_disabled, R.color.gray, resources.getString(R.string.delete_subject))
+            buttonLayout.translationZ = 0F
+        }
+
+        fun reloadDeleteButton() {
+            if(buttonMode != ButtonMod.DELETE) return
+            val size = getAllCheckedSubjectViews().size
+            if(size == 0) disableDeleteButton()
+            else enableDeleteButton(size)
+        }
+
+        fun setModeToGenerate() {
+            buttonMode = ButtonMod.GENERATE
+            mergeButton(R.drawable.time_table_subject_background, R.color.green, resources.getString(R.string.generate_subject))
+            buttonLayout.translationZ = 10F
+            button.apply {
+                setOnClickListener {
+                    timetableFragment.openSubjectGenerator(TimetableFragment.Direction.NEXT)
+                }
+                startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
+            }
+        }
+
+        fun setModeToDelete() {
+            buttonMode = ButtonMod.DELETE
+            enableDeleteButton(1)
+            button.apply {
+                setOnClickListener {
+                    if(!disabled) alertDelete()
+                }
+                startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in))
             }
         }
     }

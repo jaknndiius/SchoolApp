@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/table_row"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:orientation="horizontal"
+    android:background="@drawable/time_table_subject_background"
+    android:paddingHorizontal="15dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginBottom="10dp"
+    android:translationZ="5dp">
+
+    <TextView
+        android:id="@+id/subject_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/green"
+        android:textAlignment="center"
+        android:textSize="14dp"
+        android:textFontWeight="400"
+        android:gravity="center"/>
+</LinearLayout>

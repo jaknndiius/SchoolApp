@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerLinearLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/back_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_back"
+            android:backgroundTint="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/timetable_setting"
+            android:textAlignment="center"
+            android:textColor="@color/green"
+            android:textFontWeight="500"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        android:translationZ="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout">
+
+        <RadioGroup
+            android:id="@+id/day_radio_group"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/monday"
+                android:button="@drawable/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingHorizontal="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/time_table_subject_button_background_selector"
+                android:text="월요일"
+                android:textColor="@color/timetable_button_selector"
+                android:textSize="14dp"/>
+            <RadioButton
+                android:id="@+id/tuesday"
+                android:button="@drawable/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingHorizontal="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/time_table_subject_button_background_selector"
+                android:text="화요일"
+                android:textColor="@color/timetable_button_selector"
+                android:textSize="14dp"/>
+            <RadioButton
+                android:id="@+id/wednesday"
+                android:button="@drawable/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingHorizontal="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/time_table_subject_button_background_selector"
+                android:text="수요일"
+                android:textColor="@color/timetable_button_selector"
+                android:textSize="14dp"/>
+            <RadioButton
+                android:id="@+id/thursday"
+                android:button="@drawable/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingHorizontal="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/time_table_subject_button_background_selector"
+                android:text="목요일"
+                android:textColor="@color/timetable_button_selector"
+                android:textSize="14dp"/>
+            <RadioButton
+                android:id="@+id/friday"
+                android:button="@drawable/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingHorizontal="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/time_table_subject_button_background_selector"
+                android:text="금요일"
+                android:textColor="@color/timetable_button_selector"
+                android:textSize="14dp"/>
+        </RadioGroup>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="match_parent"
+            android:background="@drawable/time_table_subject_background_bold"
+            android:paddingVertical="10dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/subject_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scrollbars="none"
+        android:layout_marginVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+        <LinearLayout
+            android:id="@+id/drop_subject_layout"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/drop_subject_layout_line1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"/>
+            <LinearLayout
+                android:id="@+id/drop_subject_layout_line2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"/>
+            <LinearLayout
+                android:id="@+id/drop_subject_layout_line3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

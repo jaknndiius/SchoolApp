@@ -175,6 +175,9 @@ class MainActivity : AppCompatActivity() {
         fun getAll(): List<SubjectTable> {
             return subjectTableDao.getAll()
         }
+        fun get(weekDay: WeekDay): SubjectTable {
+            return subjectTableDao.findById(weekDay)
+        }
         fun isExist(weekDay: WeekDay): Boolean {
             return !subjectTableDao.getAll().none { it.uid == weekDay }
         }

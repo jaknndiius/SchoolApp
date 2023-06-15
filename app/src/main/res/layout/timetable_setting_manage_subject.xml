@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout"
-        app:layout_constraintBottom_toTopOf="@+id/generate_subject">
+        app:layout_constraintBottom_toTopOf="@+id/edit_subject_layout">
 
         <LinearLayout
             android:id="@+id/subject_layout"
@@ -64,7 +64,7 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/generate_subject"
+        android:id="@+id/edit_subject_layout"
         android:layout_width="220dp"
         android:layout_height="45dp"
         android:layout_marginBottom="50dp"
@@ -77,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/subject_merge_button"
+            android:id="@+id/edit_subject_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/transparent"

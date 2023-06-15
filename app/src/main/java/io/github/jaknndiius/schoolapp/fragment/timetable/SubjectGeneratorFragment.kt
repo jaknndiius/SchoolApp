@@ -1,7 +1,6 @@
 package io.github.jaknndiius.schoolapp.fragment.timetable
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TimetableSubjectGeneratorFragment(
-    private val parent: TimetableFragment
+class SubjectGeneratorFragment(
+    private val timetableFragment: TimetableFragment
 ) : Fragment() {
 
     override fun onCreateView(
@@ -27,20 +26,20 @@ class TimetableSubjectGeneratorFragment(
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = inflater.inflate(R.layout.fragment_timetable_setting_subject_generator, container, false)
+        val binding = inflater.inflate(R.layout.timetable_setting_subject_generator, container, false)
 
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
-            parent.openSubjectManagement(TimetableFragment.Direction.PREVIOUS)
+            timetableFragment.openSubjectManagement(TimetableFragment.Direction.PREVIOUS)
         }
 
         binding.findViewById<Button>(R.id.generate_subject_button).setOnClickListener {
             val subjectEditText: EditText = binding.findViewById(R.id.subject_name)
             val teacherEditText: EditText = binding.findViewById(R.id.teacher_name)
             if(subjectEditText.text.isNullOrBlank()) {
-                Toast.makeText(this.context, "과목 이름을 작성해 주세요!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.request_subject_name), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else if(teacherEditText.text.isNullOrBlank()) {
-                Toast.makeText(this.context, "선생님 성함을 작성해 주세요!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.request_teacher_name), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val subjectName = subjectEditText.text.toString().replace(" ", "")
@@ -48,14 +47,13 @@ class TimetableSubjectGeneratorFragment(
             CoroutineScope(Dispatchers.IO).launch {
                 if(MainActivity.subjectManager.isExist(subjectName)) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@TimetableSubjectGeneratorFragment.context, "이미 존재하는 과목이름입니다.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@SubjectGeneratorFragment.context, getString(R.string.say_already_existing_subject), Toast.LENGTH_LONG).show()
                     }
                 } else {
                     MainActivity.subjectManager.define(subjectName, teacherName)
-                    MainActivity.subjectManager.getAll().forEach { Log.d("KAJ:LKSJL:", it.toString()) }
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@TimetableSubjectGeneratorFragment.context, "'${subjectName}' 과목을 생성했습니다.", Toast.LENGTH_LONG).show()
-                        parent.openSubjectManagement(TimetableFragment.Direction.PREVIOUS)
+                        Toast.makeText(this@SubjectGeneratorFragment.context, getString(R.string.say_generated_subject_with_name, subjectName), Toast.LENGTH_LONG).show()
+                        timetableFragment.openSubjectManagement(TimetableFragment.Direction.PREVIOUS)
                     }
                 }
             }

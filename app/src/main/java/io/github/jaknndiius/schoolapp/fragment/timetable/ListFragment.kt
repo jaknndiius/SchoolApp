@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class TimetableListFragment(
-    private val parent: TimetableFragment
+class ListFragment(
+    private val timetableFragment: TimetableFragment
 ) : Fragment() {
 
     private val weekday = listOf("월", "화", "수", "목", "금")
@@ -33,7 +33,7 @@ class TimetableListFragment(
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = inflater.inflate(R.layout.fragment_timetable_list, container, false)
+        val binding = inflater.inflate(R.layout.timetable_list, container, false)
                 val scrollView: HorizontalScrollView = binding.findViewById(R.id.tables_scroll)
         // 700 * n
         val tablesLayout: LinearLayout = scrollView.findViewById(R.id.tables_layout)
@@ -49,7 +49,7 @@ class TimetableListFragment(
 
         val settingButton: AppCompatButton = binding.findViewById(R.id.setting_button)
         settingButton.setOnClickListener {
-            parent.openTimetableSetting(TimetableFragment.Direction.NEXT)
+            timetableFragment.openTimetableSetting(TimetableFragment.Direction.NEXT)
         }
 
         return binding
@@ -67,7 +67,7 @@ class TimetableListFragment(
     }
 
     private fun makeDay(inflater: LayoutInflater, container: ViewGroup, table: SubjectTable): View {
-        val view = inflater.inflate(R.layout.fragment_timetable_day, container, false)
+        val view = inflater.inflate(R.layout.timetable_day_layout, container, false)
         view.findViewById<TextView>(R.id.day_name).text = "${weekday[table.uid.ordinal]}요일"
         val subjectLayout: LinearLayout = view.findViewById(R.id.subject_layout)
         for(subject in table.subjects) {
@@ -78,7 +78,7 @@ class TimetableListFragment(
         return view
     }
     private fun makeSubject(inflater: LayoutInflater, container: ViewGroup, subjectName: String, teacherName: String): View {
-        return inflater.inflate(R.layout.fragment_timetable_subject, container, false).apply {
+        return inflater.inflate(R.layout.timetable_subject_layout, container, false).apply {
             findViewById<TextView>(R.id.subject_name).text = subjectName
             findViewById<TextView>(R.id.teacher_name).text = teacherName
         }

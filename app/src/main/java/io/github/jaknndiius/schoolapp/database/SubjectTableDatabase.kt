@@ -30,8 +30,8 @@ interface SubjectTableDao {
     @Query("SELECT * FROM subjecttable")
     fun getAll(): List<SubjectTable>
 
-    @Query("SELECT * FROM subjecttable WHERE subjects LIKE :subjects LIMIT 1")
-    fun findByName(subjects: List<Subject>): SubjectTable
+    @Query("SELECT * FROM subjecttable WHERE uid LIKE :uid LIMIT 1")
+    fun findById(uid: WeekDay): SubjectTable
 
     @Insert
     fun insertAll(vararg subjectTables: SubjectTable)
