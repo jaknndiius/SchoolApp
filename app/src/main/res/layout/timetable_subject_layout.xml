@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="30dp"
     android:orientation="horizontal"
-    android:background="@drawable/time_table_subject_background"
+    android:background="@drawable/timetable_subject_background"
     android:paddingHorizontal="15dp"
     android:layout_marginHorizontal="20dp"
     android:layout_marginBottom="10dp"

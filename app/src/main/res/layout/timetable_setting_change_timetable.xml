@@ -2,38 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerLinearLayout"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingVertical="20dp"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/back_button"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/ic_back"
-            android:backgroundTint="@color/green"
+            style="@style/BackButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/timetable_setting"
-            android:textAlignment="center"
-            android:textColor="@color/green"
-            android:textFontWeight="500"
-            android:textSize="20dp"
+            android:text="@string/setting_change_subject"
+            style="@style/TimetableSettingTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +35,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="350dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout">
@@ -69,78 +60,28 @@
 
                 <RadioButton
                     android:id="@+id/monday"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_button_background_selector"
-                    android:button="@drawable/transparent"
-                    android:paddingHorizontal="15dp"
                     android:text="월요일"
-                    android:textColor="@color/timetable_button_selector"
-                    android:textAlignment="center"
-                    android:textSize="14dp"
-                    android:translationZ="5dp"/>
+                    style="@style/DayRadioButton" />
 
                 <RadioButton
                     android:id="@+id/tuesday"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_button_background_selector"
-                    android:button="@drawable/transparent"
-                    android:paddingHorizontal="15dp"
                     android:text="화요일"
-                    android:textColor="@color/timetable_button_selector"
-                    android:textAlignment="center"
-                    android:textSize="14dp"
-                    android:translationZ="5dp"/>
+                    style="@style/DayRadioButton"/>
 
                 <RadioButton
                     android:id="@+id/wednesday"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_button_background_selector"
-                    android:button="@drawable/transparent"
-                    android:paddingHorizontal="15dp"
                     android:text="수요일"
-                    android:textColor="@color/timetable_button_selector"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:translationZ="5dp"/>
+                    style="@style/DayRadioButton"/>
 
                 <RadioButton
                     android:id="@+id/thursday"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_button_background_selector"
-                    android:button="@drawable/transparent"
-                    android:paddingHorizontal="15dp"
                     android:text="목요일"
-                    android:textColor="@color/timetable_button_selector"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:translationZ="5dp"/>
+                    style="@style/DayRadioButton"/>
 
                 <RadioButton
                     android:id="@+id/friday"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_button_background_selector"
-                    android:button="@drawable/transparent"
-                    android:paddingHorizontal="15dp"
                     android:text="금요일"
-                    android:textColor="@color/timetable_button_selector"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:translationZ="5dp"/>
+                    style="@style/DayRadioButton"/>
             </RadioGroup>
 
             <LinearLayout
@@ -155,30 +96,15 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/save_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_background"
-                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/timetable_subject_background"
                     android:text="@string/save"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:translationZ="5dp"/>
+                    style="@style/SaveInitButton"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/init_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/time_table_subject_button_background_enabled"
-                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/timetable_subject_button_background_enabled"
                     android:text="@string/init"
-                    android:textColor="@color/timetable_button_selector"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    android:translationZ="5dp" />
+                    style="@style/SaveInitButton"/>
 
             </LinearLayout>
 
@@ -189,9 +115,10 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-            android:background="@drawable/time_table_subject_background_bold"
+            android:background="@drawable/timetable_subject_background_bold"
             android:paddingVertical="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
             android:translationZ="5dp"
             android:scrollbars="none">
 
@@ -199,6 +126,7 @@
                 android:id="@+id/subject_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
                 android:orientation="vertical"/>
         </ScrollView>
 
@@ -206,10 +134,11 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="none"
         android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -217,28 +146,23 @@
 
         <LinearLayout
             android:id="@+id/drop_subject_layout"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/drop_subject_layout_line1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"/>
+                style="@style/DropSubjectLayout"
+                />
             <LinearLayout
                 android:id="@+id/drop_subject_layout_line2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"/>
+                android:layout_marginHorizontal="10dp"
+                style="@style/DropSubjectLayout"
+                />
             <LinearLayout
                 android:id="@+id/drop_subject_layout_line3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"/>
+                style="@style/DropSubjectLayout"
+                />
         </LinearLayout>
 
     </ScrollView>

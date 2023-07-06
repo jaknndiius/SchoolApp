@@ -11,7 +11,7 @@
         android:id="@+id/table_row"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/time_table_subject_background"
+        android:background="@drawable/timetable_subject_background"
         android:orientation="horizontal"
         android:paddingHorizontal="15dp"
         android:translationZ="5dp"

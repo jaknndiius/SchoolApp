@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerLinearLayout"
@@ -25,45 +26,11 @@
 
         <TextView
             android:id="@+id/setting_title"
-            android:text="@string/setting_manage_subject"
-
+            android:text="@string/setting_set_exam"
             style="@style/TimetableSettingTitle"
-            
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginBottom="10dp"
-        android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout"
-        app:layout_constraintBottom_toTopOf="@+id/edit_subject_button">
-
-        <LinearLayout
-            android:id="@+id/subject_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:translationZ="10dp" />
-
-    </ScrollView>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/edit_subject_button"
-        android:layout_width="220dp"
-        android:layout_height="45dp"
-        android:textFontWeight="400"
-        android:textSize="14dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

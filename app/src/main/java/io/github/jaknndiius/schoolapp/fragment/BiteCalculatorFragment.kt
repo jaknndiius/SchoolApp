@@ -3,23 +3,31 @@ package io.github.jaknndiius.schoolapp.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.R
+import io.github.jaknndiius.schoolapp.enums.Direction
+import io.github.jaknndiius.schoolapp.fragment.timetable.ChangeTimetableFragment
 import java.nio.charset.Charset
 
-class BiteCalculatorFragment : Fragment() {
+class BiteCalculatorFragment : Fragment(), MainFragment {
+
+    lateinit var binding: View
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = inflater.inflate(R.layout.fragment_bite_calculator, container, false)
+        binding = inflater.inflate(R.layout.fragment_bite_calculator, container, false)
 
         val stateLayout: LinearLayout = binding.findViewById(R.id.stateLinearLayout)
         val stringlength: TextView = stateLayout.findViewById<LinearLayout>(R.id.stringLinearLayout).findViewById(R.id.stringLength)
@@ -33,11 +41,24 @@ class BiteCalculatorFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable) {
                 val str = s.toString()
-                stringlength.text = "${str.length}자"
+                stringlength.text = getString(R.string.word_length_with_count, str.length)
                 bitelength.text = "${str.toByteArray(Charset.defaultCharset()).size}"
             }
         })
 
         return binding.rootView
+    }
+
+    override fun changeHeader(offset: Float, direction: Direction) {
+        val header: LinearLayout = binding.findViewById(R.id.headerBackground)
+        val title: TextView = binding.findViewById(R.id.title)
+        val px = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            100 + 210*offset,
+            resources.displayMetrics
+        ).toInt()
+        header.layoutParams = ViewGroup.LayoutParams(header.layoutParams.width, px)
+
+        title.alpha = offset
     }
 }

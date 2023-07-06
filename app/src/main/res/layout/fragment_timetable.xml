@@ -11,22 +11,23 @@
     <LinearLayout
         android:id="@+id/headerLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:background="@drawable/background_reverse"
         android:orientation="vertical"
-        android:padding="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/timetable"
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textFontWeight="500"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:gravity="center"/>
     </LinearLayout>
 
     <FrameLayout

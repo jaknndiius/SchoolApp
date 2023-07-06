@@ -16,16 +16,29 @@
     <string name="setting_manage_subject">과목 관리</string>
     <string name="setting_change_subject">시간표 수정</string>
     <string name="setting_set_exam">시험 설정</string>
-    <string name="setting_generate_subject">과목 생성하기</string>
+    <string name="setting_generate_subject">과목 추가하기</string>
+    <string name="setting_edit_subject">과목 수정하기</string>
     <string name="generate_subject">과목 추가하기</string>
     <string name="delete_subject">과목 삭제하기</string>
     <string name="delete_subject_with_count">과목 삭제하기(%d개)</string>
+
+    <string name="word_length_with_count">%d자</string>
+    <string name="type_text_here">여기에 텍스트를 입력하세요</string>
+
+    <string-array name="weekday_names">
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+    </string-array>
 
     <string name="request_subject_name">과목 이름을 작성하세요.</string>
     <string name="request_teacher_name">선생님 성함을 작성하세요.</string>
     <string name="request_right_drag">시간표 안에 과목을 드래그 해주세요.</string>
     <string name="say_already_existing_subject">이미 존재하는 과목 이름입니다.</string>
     <string name="say_generated_subject_with_name">\'%s\' 과목을 생성했습니다.</string>
+    <string name="say_edited_subject_with_name">\'%s\' 과목을 수정했습니다.</string>
     <string name="say_deleted_subjects_with_count">과목 %d개를 삭제하였습니다.</string>
     <string name="say_saved_subjects_with_weekday">%s요일의 시간표를 설정했습니다.</string>
     <string name="say_initialized_at_weekday">초기화했습니다.</string>
@@ -34,6 +47,7 @@
     <string name="ask_save_at_weekday">해당 과목들을 %s요일에 설정하시겠습니까?</string>
     <string name="ask_really_init">해당 요일 시간표를 초기화하시겠습니까?</string>
     <string name="ask_leave_or_save">저장하지 않은 설정이 있습니다. 저장하시겠습니까?</string>
+    <string name="ask_really_leave_without_save">설정을 저장하지 않았습니다. 그래도 나가시겠습니까?</string>
     <string name="yes">네</string>
     <string name="no">아니요</string>
     <string name="init">초기화</string>

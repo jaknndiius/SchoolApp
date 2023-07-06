@@ -4,8 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerLinearLayout"
@@ -19,23 +18,14 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/back_button"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/ic_back"
-            android:backgroundTint="@color/green"
+            style="@style/BackButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/setting_generate_subject"
-            android:textAlignment="center"
-            android:textColor="@color/green"
-            android:textFontWeight="500"
-            android:textSize="20dp"
+            android:id="@+id/title"
+            style="@style/TimetableSettingTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +36,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/time_table_subject_background_bold"
+        android:background="@drawable/timetable_subject_background_bold"
         android:orientation="horizontal"
         android:paddingHorizontal="10dp"
         android:layout_marginTop="50dp"
@@ -80,7 +70,7 @@
         android:id="@+id/linerLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/time_table_subject_background_bold"
+        android:background="@drawable/timetable_subject_background_bold"
         android:orientation="horizontal"
         android:paddingHorizontal="10dp"
         android:layout_marginTop="10dp"
@@ -117,7 +107,6 @@
         android:layout_height="40dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/bottom_button"
-        android:text="@string/setting_generate_subject"
         android:textFontWeight="400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

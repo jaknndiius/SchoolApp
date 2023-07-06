@@ -8,13 +8,21 @@
     tools:context=".fragment.BiteCalculatorFragment">
 
     <LinearLayout
+        android:id="@+id/headerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/background_reverse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal" />
+
+    <LinearLayout
         android:id="@+id/headerLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_reverse"
+        android:layout_height="300dp"
         android:orientation="vertical"
         android:paddingTop="35dp"
-        android:paddingBottom="40dp"
         android:paddingHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -245,7 +253,7 @@
         android:layout_margin="20dp"
         android:background="@drawable/edittext_background_selector"
         android:gravity="start|top"
-        android:hint="여기에 텍스트를 입력하세요"
+        android:hint="@string/type_text_here"
         android:inputType="textMultiLine"
         android:padding="10dp"
         android:textColor="@color/green"

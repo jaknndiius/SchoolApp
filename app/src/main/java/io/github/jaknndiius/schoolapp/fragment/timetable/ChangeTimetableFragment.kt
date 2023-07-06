@@ -8,7 +8,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
-import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -16,35 +15,29 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.*
-import android.widget.LinearLayout.LayoutParams
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.allViews
-import androidx.core.view.children
-import androidx.core.view.get
-import androidx.core.view.marginBottom
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.database.SubjectTable
 import io.github.jaknndiius.schoolapp.database.WeekDay
+import io.github.jaknndiius.schoolapp.enums.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ChangeTimetableFragment(
     private val timetableFragment: TimetableFragment
 ) : Fragment() {
 
-    private val weekday = listOf("월", "화", "수", "목", "금")
+    private val SUBJECT_TABLE_VIEW = "SubjectTableView"
+
+    lateinit var weekday: Array<String>
 
     lateinit var binding: View
     lateinit var inflater: LayoutInflater
@@ -57,19 +50,30 @@ class ChangeTimetableFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        weekday = resources.getStringArray(R.array.weekday_names)
+
         this.inflater = inflater
 
         binding = inflater.inflate(R.layout.timetable_setting_change_timetable, container, false)
 
         binding.findViewById<AppCompatButton>(R.id.back_button).setOnClickListener {
-            timetableFragment.openTimetableSetting(TimetableFragment.Direction.PREVIOUS)
+            CoroutineScope(Dispatchers.IO).launch {
+                val isChanged = settingIsChanged()
+                withContext(Dispatchers.Main) {
+                   if(isChanged) askAndRun(getString(R.string.ask_really_leave_without_save), DialogInterface.OnClickListener { _, _ ->
+                           timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+                       })
+                   else timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+                }
+            }
         }
 
         subjectLayout = binding.findViewById<LinearLayout>(R.id.subject_layout).apply {
             setOnDragListener{ v, e ->
                 when (e.action) {
                     DragEvent.ACTION_DRAG_STARTED -> e.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
-                    DragEvent.ACTION_DRAG_ENTERED ->  true
+                    DragEvent.ACTION_DRAG_ENTERED -> true
                     DragEvent.ACTION_DRAG_LOCATION -> true
                     DragEvent.ACTION_DRAG_EXITED -> true
                     DragEvent.ACTION_DROP -> true
@@ -96,7 +100,6 @@ class ChangeTimetableFragment(
             binding.findViewById(R.id.drop_subject_layout_line3)
         )
         CoroutineScope(Dispatchers.IO).launch {
-
             val subjects = MainActivity.subjectManager.getAll()
             withContext(Dispatchers.Main) {
                 subjects.forEachIndexed { index, subject ->
@@ -109,11 +112,12 @@ class ChangeTimetableFragment(
         reloadDaySubject(WeekDay.MONDAY)
 
         binding.findViewById<AppCompatButton>(R.id.save_button).setOnClickListener {
-            val currentWeekDay =  weekday[getCheckedWeekday().ordinal]
+            val currentWeekDay = getCheckedWeekday()
+            val currentKoreanWeekDay =  weekday[currentWeekDay.ordinal]
             askAndRun(
-                getString(R.string.ask_save_at_weekday, currentWeekDay), DialogInterface.OnClickListener { _, _ ->
-                    save(getCheckedWeekday())
-                    Toast.makeText(context, getString(R.string.say_saved_subjects_with_weekday, currentWeekDay), Toast.LENGTH_LONG).show()
+                getString(R.string.ask_save_at_weekday, currentKoreanWeekDay), DialogInterface.OnClickListener { _, _ ->
+                    save(currentWeekDay)
+                    Toast.makeText(context, getString(R.string.say_saved_subjects_with_weekday, currentKoreanWeekDay), Toast.LENGTH_LONG).show()
                 })
         }
 
@@ -152,12 +156,17 @@ class ChangeTimetableFragment(
     private fun save(weekDay: WeekDay) {
         CoroutineScope(Dispatchers.IO).launch {
             MainActivity.subjectTableManager.addOrUpdate(weekDay, getSubjectsSet())
+            withContext(Dispatchers.Main) {
+                reloadButton()
+            }
         }
     }
 
     private fun getSubjectsInTable(): List<View> {
         val outputViews: ArrayList<View> = arrayListOf()
-        binding.findViewById<LinearLayout>(R.id.subject_layout).findViewsWithText(outputViews, "SubjectTableView", LinearLayout.FIND_VIEWS_WITH_CONTENT_DESCRIPTION)
+        try {
+            binding.findViewsWithText(outputViews, SUBJECT_TABLE_VIEW, LinearLayout.FIND_VIEWS_WITH_CONTENT_DESCRIPTION)
+        } catch (_: Exception) {}
         return outputViews
     }
 
@@ -168,14 +177,15 @@ class ChangeTimetableFragment(
     private fun reloadDaySubject(weekDay: WeekDay) {
 
         CoroutineScope(Dispatchers.IO).launch {
-            val tables = MainActivity.subjectTableManager.get(weekDay)
+            val subjects = MainActivity.subjectTableManager.get(weekDay).subjects
 
             withContext(Dispatchers.Main) {
                 subjectLayout.removeAllViews()
-
-                tables.subjects.forEach {
+                if(subjects.isEmpty()) subjectLayout.addView(insertBlank)
+                else subjects.forEach {
                     subjectLayout.addView(makeTableSubject(it.name))
                 }
+                reloadButton()
             }
         }
     }
@@ -209,8 +219,26 @@ class ChangeTimetableFragment(
         }
     }
 
+    private fun settingIsChanged(): Boolean {
+        val currentSetting = getSubjectsSet()
+        val databaseSetting = MainActivity.subjectTableManager.get(getCheckedWeekday()).subjects.map { it.name }
+        return currentSetting != databaseSetting
+    }
+
+    private fun reloadButton() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val isChanged = settingIsChanged()
+            withContext(Dispatchers.Main) {
+                binding.findViewById<AppCompatButton>(R.id.save_button).isEnabled = isChanged
+                binding.findViewById<AppCompatButton>(R.id.init_button).isEnabled = isChanged
+            }
+        }
+    }
+
     private fun removeSubject(view: View) {
         subjectLayout.removeView(view)
+        reloadButton()
+        if(subjectLayout.isEmpty()) subjectLayout.addView(insertBlank)
     }
 
     private fun makeBlank(): View {
@@ -230,6 +258,7 @@ class ChangeTimetableFragment(
                             makeTableSubject(dragData.toString()),
                             subjectLayout.indexOfChild(v)
                         )
+                        reloadButton()
                         subjectLayout.removeView(v)
                         true
                     }
@@ -237,7 +266,10 @@ class ChangeTimetableFragment(
                         v.findViewById<LinearLayout>(R.id.subject_background).startAnimation(AnimationUtils.loadAnimation(context, R.anim.scale_up))
                         true
                     }
-                    DragEvent.ACTION_DRAG_ENDED -> true
+                    DragEvent.ACTION_DRAG_ENDED -> {
+
+                        true
+                    }
                     else -> false
                 }
             }
@@ -248,14 +280,29 @@ class ChangeTimetableFragment(
     private fun makeTableSubject(subjectName: String): View {
 
         return makeSubject(subjectLayout, subjectName).apply {
-            contentDescription = "SubjectTableView"
-            setOnLongClickListener {
-                removeSubject(it)
+            contentDescription = SUBJECT_TABLE_VIEW
+            tag = subjectName
+            setOnLongClickListener {v ->
+                val item = ClipData.Item(v.tag as? CharSequence)
+                val dragData = ClipData(
+                    v.tag as? CharSequence,
+                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN, "TEST"),
+                    item
+                )
+                val shadow = SubjectDragShadowBuilder(this)
+                v.startDragAndDrop(
+                    dragData,
+                    shadow,
+                    null,
+                    0
+                )
+                removeSubject(v)
                 true
             }
             setOnDragListener{ v, e ->
                 when (e.action) {
                     DragEvent.ACTION_DRAG_STARTED -> e.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
+
                     DragEvent.ACTION_DRAG_ENTERED ->  {
                         v.findViewById<LinearLayout>(R.id.subject_background).startAnimation(AnimationUtils.loadAnimation(context, R.anim.scale_down))
                         true
@@ -283,6 +330,7 @@ class ChangeTimetableFragment(
                             makeTableSubject(dragData.toString()),
                             subjectLayout.indexOfChild(v)
                         )
+                        reloadButton()
                         subjectLayout.removeView(v)
                         true
                     }

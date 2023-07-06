@@ -1,7 +1,10 @@
 package io.github.jaknndiius.schoolapp.fragment.timetable
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +17,7 @@ import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.SubjectTable
+import io.github.jaknndiius.schoolapp.enums.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,17 +29,17 @@ class ListFragment(
     private val timetableFragment: TimetableFragment
 ) : Fragment() {
 
-    private val weekday = listOf("월", "화", "수", "목", "금")
+    private lateinit var weekday: Array<String>
+    private lateinit var binding: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val binding = inflater.inflate(R.layout.timetable_list, container, false)
-                val scrollView: HorizontalScrollView = binding.findViewById(R.id.tables_scroll)
-        // 700 * n
+        weekday = resources.getStringArray(R.array.weekday_names)
+        binding = inflater.inflate(R.layout.timetable_list, container, false)
+        val scrollView: HorizontalScrollView = binding.findViewById(R.id.tables_scroll)
         val tablesLayout: LinearLayout = scrollView.findViewById(R.id.tables_layout)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -49,21 +53,25 @@ class ListFragment(
 
         val settingButton: AppCompatButton = binding.findViewById(R.id.setting_button)
         settingButton.setOnClickListener {
-            timetableFragment.openTimetableSetting(TimetableFragment.Direction.NEXT)
+            timetableFragment.openTimetableSetting(Direction.NEXT)
         }
 
+        Handler().postDelayed({reload()}, 100)
         return binding
     }
 
     private fun getDay(): Int {
         // Sunday:0 ~ Saturday: 6
-        return Date().day
+        return Date().day.coerceAtMost(5).coerceAtLeast(1)
+    }
+    fun getScrollX(): Int {
+        return 700*(getDay() -1)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    public fun reload() {
-        val dayNumber = getDay().coerceAtMost(5).coerceAtLeast(1)
-        this.view?.findViewById<HorizontalScrollView>(R.id.tables_scroll)?.scrollX = 700 * (dayNumber - 1)
+    fun reload() {
+        try {
+            binding.findViewById<HorizontalScrollView>(R.id.tables_scroll).scrollX = getScrollX()
+        }catch (e: Exception) {Log.d("EEEEEEE", e.message.toString()) }
     }
 
     private fun makeDay(inflater: LayoutInflater, container: ViewGroup, table: SubjectTable): View {

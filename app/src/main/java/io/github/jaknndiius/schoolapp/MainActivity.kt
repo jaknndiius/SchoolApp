@@ -1,11 +1,14 @@
 package io.github.jaknndiius.schoolapp
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.BoringLayout
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -14,11 +17,13 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jaknndiius.schoolapp.database.*
+import io.github.jaknndiius.schoolapp.enums.Direction
 import io.github.jaknndiius.schoolapp.fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.io.*
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -106,13 +111,18 @@ class MainActivity : AppCompatActivity() {
         adapter.addItems(listOf(HomeFragment(), TimetableFragment(), ScheduleFragment(), BiteCalculatorFragment()))
         pager.adapter = adapter
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
-
         pager.addOnPageChangeListener(object: OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                try {
+                    if(position == adapter.count-1) return
+                    (adapter.getItem(position) as MainFragment).changeHeader(positionOffset, Direction.NONE)
+                    (adapter.getItem(position +1) as MainFragment).changeHeader(positionOffset, Direction.PREVIOUS)
+                }catch (_:Exception) {}
 
-            @RequiresApi(Build.VERSION_CODES.O)
+            }
+
             override fun onPageSelected(position: Int) {
-                if(fragmentId[position] == R.id.menu_timetable) (adapter.getItem(position) as TimetableFragment).reload()
+
                 bottomNavigation.menu.findItem(fragmentId[position]?: R.id.menu_home).isChecked = true
             }
 
@@ -173,12 +183,20 @@ class MainActivity : AppCompatActivity() {
             subjectTableDao.getAll().forEach { subjectTableDao.delete(it)  }
         }
         fun getAll(): List<SubjectTable> {
-            return subjectTableDao.getAll()
+            val newList: ArrayList<SubjectTable> = arrayListOf()
+            for(weekDay in WeekDay.values()) {
+                if(isExist(weekDay)) newList.add(findByWeekday(weekDay))
+                else newList.add(SubjectTable(weekDay, listOf()))
+            }
+            return newList
         }
-        fun get(weekDay: WeekDay): SubjectTable {
+        private fun findByWeekday(weekDay: WeekDay): SubjectTable {
             return subjectTableDao.findById(weekDay)
         }
-        fun isExist(weekDay: WeekDay): Boolean {
+        fun get(weekDay: WeekDay): SubjectTable {
+            return getAll()[weekDay.ordinal]
+        }
+        private fun isExist(weekDay: WeekDay): Boolean {
             return !subjectTableDao.getAll().none { it.uid == weekDay }
         }
         fun addOrUpdate(weekDay: WeekDay, subjectNames: List<String>) {
@@ -188,6 +206,10 @@ class MainActivity : AppCompatActivity() {
             }
             if(isExist(weekDay)) subjectTableDao.updateSubjectTables(SubjectTable(weekDay, subjects))
             else subjectTableDao.insertAll(SubjectTable(weekDay, subjects))
+        }
+        fun delete(weekDay: WeekDay) {
+            if(!isExist(weekDay)) return
+            subjectTableDao.delete(findByWeekday(weekDay))
         }
     }
 }
