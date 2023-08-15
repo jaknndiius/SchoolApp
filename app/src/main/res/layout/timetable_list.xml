@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -12,6 +11,7 @@
         android:orientation="vertical"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
+        android:translationZ="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -19,7 +19,7 @@
             android:id="@+id/setting_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/settings"
+            android:background="@drawable/ic_settings"
             android:backgroundTint="@color/green" />
 
         <TextView
@@ -39,8 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="none"
-        android:layout_marginBottom="35dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -48,8 +48,25 @@
             android:id="@+id/tables_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="bottom"
             android:orientation="horizontal"
             android:paddingHorizontal="35dp" />
 
     </HorizontalScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_lightgray_cabove10"
+        android:layout_marginHorizontal="50dp"
+
+        app:itemIconTint="@drawable/selector_timetable_menu_color"
+        app:itemTextColor="@drawable/selector_timetable_menu_color"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/timetable_navbar"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

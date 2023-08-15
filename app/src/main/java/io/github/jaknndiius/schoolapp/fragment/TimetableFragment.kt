@@ -1,27 +1,22 @@
 package io.github.jaknndiius.schoolapp.fragment
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.Subject
-import io.github.jaknndiius.schoolapp.enums.Direction
+import io.github.jaknndiius.schoolapp.enum.Direction
 import io.github.jaknndiius.schoolapp.fragment.timetable.*
 
 class TimetableFragment : Fragment(), MainFragment {
 
-    private lateinit var currentFragment: Fragment
+    lateinit var currentFragment: Fragment
     private lateinit var binding: View
 
 
@@ -60,6 +55,14 @@ class TimetableFragment : Fragment(), MainFragment {
         changeFragment(ExamSetterFragment(this), direction)
     }
 
+    fun openExamUpdater(direction: Direction, subject: Subject) {
+        changeFragment(ExamUpdaterFragment(this, subject), direction)
+    }
+
+    fun openExamTimetableChanger(direction: Direction) {
+        changeFragment(ExamTimetableChangerFragment(this), direction)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,11 +73,8 @@ class TimetableFragment : Fragment(), MainFragment {
         return binding
     }
 
-    private fun reload() {
-        if(currentFragment is ListFragment) (currentFragment as ListFragment).reload()
-    }
-
     override fun changeHeader(offset: Float, direction: Direction) {
+
         val title: TextView = binding.findViewById(R.id.title)
 
         if(direction == Direction.NONE) {
@@ -83,8 +83,20 @@ class TimetableFragment : Fragment(), MainFragment {
             title.alpha = offset
         }
         if(currentFragment is ListFragment) {
-            val scrollView:HorizontalScrollView? = currentFragment.view?.findViewById(R.id.tables_scroll)
-            val x = (currentFragment as ListFragment).getScrollX()
+            val listFragment = currentFragment as ListFragment
+
+            listFragment.view?.findViewById<BottomNavigationView>(R.id.bottom_navbar)?.let {
+                if(direction == Direction.NONE) {
+                    it.translationY = it.height * offset
+                } else if(direction == Direction.PREVIOUS) {
+                    it.translationY = it.height - (it.height * offset)
+                }
+            }
+
+            if(listFragment.mode != 0) return
+
+            val scrollView:HorizontalScrollView? = listFragment.view?.findViewById(R.id.tables_scroll)
+            val x = listFragment.getScrollX()
             if(direction == Direction.NONE) {
                 scrollView?.scrollX = x -(x * offset).toInt()
             } else if(direction == Direction.PREVIOUS) {

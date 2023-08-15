@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="TimetableSettingTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -9,7 +8,6 @@
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">18dp</item>
     </style>
-
     <style name="SettingButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
@@ -17,18 +15,57 @@
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:paddingHorizontal">20dp</item>
         <item name="android:layout_marginHorizontal">20dp</item>
-        <item name="android:background">@drawable/setting_button</item>
+        <item name="android:background">@drawable/bg_white_c10</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">15dp</item>
         <item name="android:gravity">start|center</item>
     </style>
-
+    <style name="AboveSettingButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:paddingHorizontal">15dp</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:background">@drawable/bg_white_cabove10</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:gravity">start|center</item>
+    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:background">@color/light_gray</item>
+    </style>
+    <style name="BelowSettingButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingHorizontal">15dp</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:background">@drawable/bg_white_cbelow10</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:gravity">start|center</item>
+    </style>
+    <style name="BackButton">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:background">@drawable/ic_previous</item>
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+    <style name="DropSubjectLayout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
     <style name="DayRadioButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:background">@drawable/timetable_subject_button_background_selector
-        </item>
+        <item name="android:background">@drawable/selector_bg_timetable_subject_button</item>
         <item name="android:button">@drawable/transparent</item>
         <item name="android:paddingHorizontal">15dp</item>
         <item name="android:textColor">@color/timetable_button_selector</item>
@@ -36,7 +73,6 @@
         <item name="android:textSize">14dp</item>
         <item name="android:translationZ">5dp</item>
     </style>
-
     <style name="SaveInitButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">30dp</item>
@@ -45,5 +81,16 @@
         <item name="android:textSize">14dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:translationZ">5dp</item>
+    </style>
+    <style name="InputText">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/transparent</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textColorHint">@color/light_green</item>
+        <item name="android:textFontWeight">300</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

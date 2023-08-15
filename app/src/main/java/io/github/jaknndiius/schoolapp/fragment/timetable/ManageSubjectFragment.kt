@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.Subject
-import io.github.jaknndiius.schoolapp.enums.Direction
+import io.github.jaknndiius.schoolapp.enum.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
 import kotlinx.coroutines.*
 
@@ -115,7 +115,7 @@ class ManageSubjectFragment(
 
     private fun alertDelete() {
         AlertDialog.Builder(context)
-            .setMessage(getString(R.string.ask_really_delete))
+            .setMessage(getString(R.string.ask_really_delete_subject))
             .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ -> deleteCheckedSubjects() })
             .setNegativeButton(getString(R.string.no), null)
             .show()
@@ -148,11 +148,13 @@ class ManageSubjectFragment(
         editButton.setModeToDelete()
 
         getAllSubjectViews().forEach {
-            ObjectAnimator.ofFloat(it.findViewById(R.id.subject_name), "translationX", 100f).apply {
+
+            val checkBox = it.findViewById<CheckBox>(R.id.select_checkbox)
+            ObjectAnimator.ofFloat(it.findViewById(R.id.subject_name), "translationX", (checkBox.layoutParams.width * 1.5).toFloat()).apply {
                 duration = 200
                 start()
             }
-            it.findViewById<CheckBox>(R.id.select_checkbox).apply {
+            checkBox.apply {
                 isChecked = false
                 visibility = View.VISIBLE
 
@@ -225,7 +227,7 @@ class ManageSubjectFragment(
         fun setModeToGenerate() {
             buttonMode = ButtonMod.GENERATE
             button.apply {
-                background = resources.getDrawable(R.drawable.timetable_subject_background)
+                background = resources.getDrawable(R.drawable.bg_white_c4_b1green)
                 text = resources.getString(R.string.generate_subject)
                 setTextColor(resources.getColor(R.color.green))
                 translationZ = 10F
@@ -241,7 +243,7 @@ class ManageSubjectFragment(
             buttonMode = ButtonMod.DELETE
             enableDeleteButton(1)
             button.apply {
-                background = resources.getDrawable(R.drawable.timetable_subject_delete_button_selector)
+                background = resources.getDrawable(R.drawable.selector_bg_timetable_subject_delete_button)
 
                 setOnClickListener {
                     alertDelete()

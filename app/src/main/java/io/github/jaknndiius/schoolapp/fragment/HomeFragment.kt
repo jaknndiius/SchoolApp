@@ -1,16 +1,17 @@
 package io.github.jaknndiius.schoolapp.fragment
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.enums.Direction
+import io.github.jaknndiius.schoolapp.enum.Direction
+import io.github.jaknndiius.schoolapp.enum.InformationType
 
 class HomeFragment : Fragment(), MainFragment {
 
@@ -22,6 +23,11 @@ class HomeFragment : Fragment(), MainFragment {
         savedInstanceState: Bundle?
     ): View? {
         binding = inflater.inflate(R.layout.fragment_home, container, false)
+
+        binding.findViewById<AppCompatButton>(R.id.camera).setOnClickListener {
+
+        }
+
         return binding
     }
 

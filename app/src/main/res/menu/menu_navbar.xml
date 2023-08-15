@@ -5,20 +5,20 @@
     <item
         android:id="@+id/menu_home"
         android:title="@string/home"
-        android:icon="@drawable/ic_home_selector" />
+        android:icon="@drawable/selector_ic_home" />
 
     <item
         android:id="@+id/menu_timetable"
         android:title="@string/timetable"
-        android:icon="@drawable/ic_timetable_selector" />
+        android:icon="@drawable/selector_ic_timetable" />
 
     <item
         android:id="@+id/menu_schedule"
         android:title="@string/schedule"
-        android:icon="@drawable/ic_schedule_selector" />
+        android:icon="@drawable/selector_ic_schedule" />
 
     <item
         android:id="@+id/menu_bite_calculator"
         android:title="@string/bite_calculator"
-        android:icon="@drawable/ic_bite_calculator_selector" />
+        android:icon="@drawable/selector_ic_bite_calculator" />
 </menu>

@@ -36,7 +36,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/timetable_subject_background_bold"
+        android:background="@drawable/bg_white_c4_b2green"
         android:orientation="horizontal"
         android:paddingHorizontal="10dp"
         android:layout_marginTop="50dp"
@@ -54,23 +54,15 @@
 
         <EditText
             android:id="@+id/subject_name"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/transparent"
-            android:hint="@string/request_subject_name"
-            android:maxLines="1"
-            android:padding="10dp"
-            android:textColor="@color/green"
-            android:textColorHint="@color/light_green"
-            android:textFontWeight="300"
-            android:textSize="16sp"/>
+            style="@style/InputText"
+            android:hint="@string/request_subject_name" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linerLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/timetable_subject_background_bold"
+        android:background="@drawable/bg_white_c4_b2green"
         android:orientation="horizontal"
         android:paddingHorizontal="10dp"
         android:layout_marginTop="10dp"
@@ -89,28 +81,23 @@
 
         <EditText
             android:id="@+id/teacher_name"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/transparent"
-            android:hint="@string/request_teacher_name"
-            android:maxLines="1"
-            android:padding="10dp"
-            android:textColor="@color/green"
-            android:textColorHint="@color/light_green"
-            android:textFontWeight="300"
-            android:textSize="16sp" />
+            style="@style/InputText"
+            android:hint="@string/request_teacher_name"/>
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/generate_subject_button"
         android:layout_width="290dp"
         android:layout_height="40dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/bottom_button"
         android:textFontWeight="400"
+        android:textSize="14dp"
+        android:textColor="@color/green"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_white_c4_b1green"
+        android:translationZ="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linerLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/linerLayout4"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

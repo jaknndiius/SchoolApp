@@ -96,13 +96,13 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/save_button"
-                    android:background="@drawable/timetable_subject_background"
+                    android:background="@drawable/bg_white_c4_b1green"
                     android:text="@string/save"
                     style="@style/SaveInitButton"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/init_button"
-                    android:background="@drawable/timetable_subject_button_background_enabled"
+                    android:background="@drawable/bg_white_c4_b1red"
                     android:text="@string/init"
                     style="@style/SaveInitButton"/>
 
@@ -115,7 +115,7 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-            android:background="@drawable/timetable_subject_background_bold"
+            android:background="@drawable/bg_white_c4_b2green"
             android:paddingVertical="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"

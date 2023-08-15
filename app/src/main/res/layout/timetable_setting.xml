@@ -51,10 +51,16 @@
             android:id="@+id/change_timetable_button"
             android:text="@string/setting_change_subject"
             style="@style/SettingButton"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/set_exam_button"
             android:text="@string/setting_set_exam"
-            style="@style/SettingButton"/>
+            style="@style/AboveSettingButton"/>
+        <View style="@style/Divider"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/set_exam_timetable_button"
+            android:text="@string/setting_set_exam_timetable"
+            style="@style/BelowSettingButton"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

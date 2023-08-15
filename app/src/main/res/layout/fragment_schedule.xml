@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.ScheduleFragment">
+    tools:context=".fragment.ScheduleFragment"
+    android:background="#fff">
 
     <LinearLayout
         android:id="@+id/headerBackground"
@@ -37,5 +38,16 @@
             android:textAlignment="center"
             android:gravity="center"/>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/schedule_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
