@@ -10,4 +10,9 @@
         android:id="@+id/menu_exam"
         android:title="시험"
         android:icon="@drawable/ic_pencil" />
+
+    <item
+        android:id="@+id/menu_photo"
+        android:title="사진"
+        android:icon="@drawable/ic_photo" />
 </menu>

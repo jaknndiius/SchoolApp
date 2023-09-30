@@ -16,12 +16,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.camera.Photo
+import io.github.jaknndiius.schoolapp.camera.data.SavedImage
 import java.io.File
 import java.io.FileOutputStream
 
 class FullscreenImgViewDialog(
     private val context: MainActivity,
-    private val img: Photo.SavedImage,
+    private val img: SavedImage,
     private val parent: ImgViewDialog?
 ): Dialog(context) {
 

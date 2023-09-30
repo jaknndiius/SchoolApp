@@ -22,15 +22,15 @@
             android:background="@drawable/ic_settings"
             android:backgroundTint="@color/green" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="설정"
-            android:textAlignment="center"
-            android:textColor="@color/green"
-            android:textFontWeight="500"
-            android:textSize="12dp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="설정"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textColor="@color/green"-->
+<!--            android:textFontWeight="500"-->
+<!--            android:textSize="12dp" />-->
     </LinearLayout>
 
     <HorizontalScrollView

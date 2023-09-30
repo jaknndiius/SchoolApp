@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.camera.Photo
+import io.github.jaknndiius.schoolapp.camera.data.Information
 import io.github.jaknndiius.schoolapp.database.ExamTable
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.database.SubjectTable
@@ -49,11 +50,11 @@ class ListFragment(
     private lateinit var tableLayout: LinearLayout
     private lateinit var inflater: LayoutInflater
 
-    private var currentClickedSubject: Photo.Information? = null
+    private var currentClickedSubject: Information? = null
     private var currentDialog: ImgViewDialog? = null
 
     var mode: Int = 0
-    // mode 0 -> regular || 1 -> exam
+    // mode 0 -> regular || 1 -> exam || 2 -> photo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +74,9 @@ class ListFragment(
                 }
                 R.id.menu_exam -> {
                     setTableToExam()
+                }
+                R.id.menu_photo -> {
+                    setTableToPhoto()
                 }
             }
             true
@@ -129,6 +133,12 @@ class ListFragment(
                 binding.findViewById<HorizontalScrollView>(R.id.tables_scroll).scrollX = 0
             }
         }
+    }
+
+    private fun setTableToPhoto() {
+        mode = 2
+        tableLayout.removeAllViews()
+        TODO("여기 사진 관련 추가해야함.")
     }
 
     private fun getDay(): Int {
@@ -188,13 +198,13 @@ class ListFragment(
     private fun openDialog(type: InformationType, subjectName: String) {
         val mainActivity = activity as MainActivity
 
-        currentClickedSubject = Photo.Information(type, subjectName)
+        currentClickedSubject = Information(type, subjectName)
 
         val imgs = MainActivity.photoManager.getSubjectImgs(type, subjectName)
 
         if(currentDialog != null) currentDialog?.cancel()
 
-        currentDialog = ImgViewDialog(mainActivity, imgs, Photo.Information(type, subjectName)).apply {
+        currentDialog = ImgViewDialog(mainActivity, imgs, Information(type, subjectName)).apply {
             setCanceledOnTouchOutside(true)
             setCancelable(true)
             setOnReloadMethod {

@@ -14,6 +14,8 @@ import android.widget.TextView
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.camera.Photo
+import io.github.jaknndiius.schoolapp.camera.data.Information
+import io.github.jaknndiius.schoolapp.camera.data.SavedImage
 import io.github.jaknndiius.schoolapp.enum.InformationType
 import java.io.File
 import java.text.SimpleDateFormat
@@ -22,17 +24,17 @@ import javax.security.auth.Subject
 
 class ImgViewDialog(
     private val context: MainActivity,
-    private val imgs: List<Photo.SavedImage>,
-    private val information: Photo.Information
+    private val imgs: List<SavedImage>,
+    private val information: Information
 ): Dialog(context) {
 
-    private var reloadImages: (() -> List<Photo.SavedImage>)? = null
+    private var reloadImages: (() -> List<SavedImage>)? = null
 
-    fun setOnReloadMethod(a: () -> List<Photo.SavedImage>) {
+    fun setOnReloadMethod(a: () -> List<SavedImage>) {
         reloadImages = a
     }
 
-    fun changeImages(images: List<Photo.SavedImage>) {
+    fun changeImages(images: List<SavedImage>) {
         listOf<LinearLayout>(
             findViewById(R.id.layout_line1),
             findViewById(R.id.layout_line2),
@@ -62,7 +64,7 @@ class ImgViewDialog(
 
     }
 
-    fun addImages(images: List<Photo.SavedImage>) {
+    fun addImages(images: List<SavedImage>) {
         val bitmapLayouts = listOf<LinearLayout>(
             findViewById(R.id.layout_line1),
             findViewById(R.id.layout_line2),
