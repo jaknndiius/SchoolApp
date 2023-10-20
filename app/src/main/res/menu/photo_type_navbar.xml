@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_perf"
+        android:title="수행평가"
+        android:icon="@drawable/ic_clock" />
+    <item
+        android:id="@+id/menu_exam"
+        android:title="시험"
+        android:icon="@drawable/ic_pencil" />
+</menu>

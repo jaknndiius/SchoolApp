@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.enum.Direction
+import io.github.jaknndiius.schoolapp.preset.Direction
 import java.nio.charset.Charset
 
 class BiteCalculatorFragment : Fragment(), MainFragment {

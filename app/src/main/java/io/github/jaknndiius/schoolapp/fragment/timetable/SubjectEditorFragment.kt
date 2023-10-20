@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.Subject
-import io.github.jaknndiius.schoolapp.enum.Direction
+import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,10 +33,8 @@ class SubjectEditorFragment(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = inflater.inflate(R.layout.timetable_setting_subject_editor, container, false)
-
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
             timetableFragment.openSubjectManagement(Direction.PREVIOUS_VERTICAL)
         }
@@ -82,14 +81,23 @@ class SubjectEditorFragment(
         val title = resources.getString(R.string.setting_edit_subject)
         binding.findViewById<TextView>(R.id.title).text = title
 
-        binding.findViewById<TextView>(R.id.subject_name).apply {
-            isEnabled = false
-            text = currentSubject!!.name
+        binding.findViewById<LinearLayout>(R.id.subject_name_layout).apply {
+            setBackgroundResource(R.drawable.bg_white_c4_b2gray)
+
+            findViewById<TextView>(R.id.subject_name_header)
+                .setTextColor(resources.getColor(R.color.gray))
+
+            findViewById<EditText>(R.id.subject_name).apply {
+                isEnabled = false
+                setText(currentSubject!!.name)
+                setTextColor(resources.getColor(R.color.gray))
+            }
+
         }
+
         binding.findViewById<EditText>(R.id.teacher_name).apply {
             setText(currentSubject!!.teacherName)
             setSelectAllOnFocus(true)
-            requestFocus()
         }.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
 

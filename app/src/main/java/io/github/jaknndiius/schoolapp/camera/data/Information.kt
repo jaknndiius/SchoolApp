@@ -1,6 +1,6 @@
 package io.github.jaknndiius.schoolapp.camera.data
 
-import io.github.jaknndiius.schoolapp.enum.InformationType
+import io.github.jaknndiius.schoolapp.preset.InformationType
 
 data class Information(
     val type: InformationType,

@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
-import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.enum.Direction
-import io.github.jaknndiius.schoolapp.enum.InformationType
+import io.github.jaknndiius.schoolapp.preset.Direction
 
 class HomeFragment : Fragment(), MainFragment {
 

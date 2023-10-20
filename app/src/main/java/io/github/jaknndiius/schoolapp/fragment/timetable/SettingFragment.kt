@@ -8,7 +8,7 @@ import android.widget.Button
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.enum.Direction
+import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
 
 class SettingFragment(
@@ -22,7 +22,7 @@ class SettingFragment(
     ): View? {
         val binding = inflater.inflate(R.layout.timetable_setting, container, false)
         binding.findViewById<AppCompatButton>(R.id.back_button).setOnClickListener {
-            timetableFragment.openTimetableList(Direction.PREVIOUS)
+            timetableFragment.openTimetableList(Direction.NONE)
         }
         binding.findViewById<Button>(R.id.manage_subject_button).setOnClickListener {
             timetableFragment.openSubjectManagement(Direction.NEXT_VERTICAL)

@@ -7,11 +7,10 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.core.content.FileProvider
 import io.github.jaknndiius.schoolapp.camera.data.Information
 import io.github.jaknndiius.schoolapp.camera.data.SavedImage
-import io.github.jaknndiius.schoolapp.enum.InformationType
+import io.github.jaknndiius.schoolapp.preset.InformationType
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -24,6 +23,8 @@ class Photo(
     companion object {
         val REQUEST_IMAGE_CAPTURE = 131
     }
+
+    var lastPhotoInformation: Information? = null
 
     private var lastPhotoPath: String? = null
 
@@ -63,6 +64,15 @@ class Photo(
         }
     }
 
+    fun getSubjectImgFiles(type: InformationType, subjectName: String): List<File> {
+        return arrayListOf<File>().apply {
+            activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles { file ->
+                val savedImage = getFromFile(file)
+                savedImage != null &&savedImage.information.type == type && savedImage.information.subjectName == subjectName
+            }?.let { addAll(it) }
+        }
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(information: Information): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -78,7 +88,9 @@ class Photo(
     }
 
     fun dispatchTakePictureIntent(information: Information) {
+        lastPhotoInformation = information
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+
             takePictureIntent.resolveActivity(activity.packageManager)?.also {
                 val photoFile: File? = try {
                     createImageFile(information)

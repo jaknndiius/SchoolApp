@@ -39,10 +39,16 @@
         <item>금</item>
     </string-array>
 
+    <string-array name="photo_types">
+        <item>수행평가</item>
+        <item>시험</item>
+    </string-array>
+
     <string name="request_subject_name">과목 이름을 작성하세요.</string>
     <string name="request_teacher_name">선생님 성함을 작성하세요.</string>
     <string name="request_right_drag">시간표 안에 과목을 드래그 해주세요.</string>
     <string name="request_input_day_or_displayname">날짜 혹은 표시 이름을 입력해주세요.</string>
+    <string name="request_photo_type">사진 종류를 선택하세요.</string>
 
     <string name="say_already_existing_subject">이미 존재하는 과목 이름입니다.</string>
     <string name="say_generated_subject_with_name">\'%s\' 과목을 생성했습니다.</string>
@@ -52,6 +58,7 @@
     <string name="say_initialized_at_weekday">초기화했습니다.</string>
     <string name="say_added_exam">시험 일정이 추가되었습니다.</string>
     <string name="say_already_existing_exam">이미 존재하는 일정입니다.</string>
+    <string name="say_no_pictures">저장된 사진이 없습니다.</string>
 
     <string name="ask_really_delete_subject">체크한 모든 과목을 삭제하시겠습니까?</string>
     <string name="ask_save_at_weekday">해당 과목들을 %s요일에 설정하시겠습니까?</string>

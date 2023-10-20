@@ -1,7 +1,6 @@
 package io.github.jaknndiius.schoolapp.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.enum.Direction
+import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.schedule.ListFragment
 
 class ScheduleFragment : Fragment(), MainFragment {
@@ -40,7 +39,7 @@ class ScheduleFragment : Fragment(), MainFragment {
     ): View? {
         binding = inflater.inflate(R.layout.fragment_schedule, container, false)
 
-        changeFragment(ListFragment(), Direction.NONE)
+        parentFragmentManager.beginTransaction().replace(R.id.schedule_container, ListFragment()).commit()
 
         return binding
     }

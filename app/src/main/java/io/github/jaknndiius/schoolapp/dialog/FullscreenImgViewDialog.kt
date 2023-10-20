@@ -1,5 +1,6 @@
 package io.github.jaknndiius.schoolapp.dialog
 
+import android.R.attr.bitmap
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
@@ -7,18 +8,22 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.camera.Photo
 import io.github.jaknndiius.schoolapp.camera.data.SavedImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+
 
 class FullscreenImgViewDialog(
     private val context: MainActivity,
@@ -46,9 +51,9 @@ class FullscreenImgViewDialog(
         findViewById<BottomNavigationView>(R.id.bottom_navbar).setOnNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.menu_save -> {
-                    val result = saveImageToGallery()
+                    saveImageToGallery()
                     Toast.makeText(context,
-                    if(result) "사진을 저장했습니다." else "사진 저장에 실패했습니다.",
+                    "사진을 저장했습니다.",
                     Toast.LENGTH_SHORT).show()
                 }
                 R.id.menu_share -> shareImage()
@@ -59,44 +64,48 @@ class FullscreenImgViewDialog(
         }
     }
 
-    private fun saveImageToGallery(): Boolean {
-        val state = Environment.getExternalStorageState()
-        if (Environment.MEDIA_MOUNTED == state) {
+//    private fun saveImageToGallery(): Boolean {
+//        val state = Environment.getExternalStorageState()
+//        if (Environment.MEDIA_MOUNTED == state) {
+//
+//            val rootPath =
+//                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+//                    .toString()
+//            val dirName = "/${context.getString(R.string.app_name)}"
+//            val fileName = System.currentTimeMillis().toString() + ".png"
+//            val savePath = File(rootPath + dirName)
+//            savePath.mkdirs()
+//
+//            val file = File(savePath, fileName)
+//            if (file.exists()) file.delete()
+//
+//            try {
+//                val out = FileOutputStream(file)
+//                img.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+//                out.flush()
+//                out.close()
+//
+//                context.sendBroadcast(
+//                    Intent(
+//                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+//                        Uri.parse("file://" + Environment.getExternalStorageDirectory())
+//                    )
+//                )
+//
+//                return true
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//        return false
+//    }
 
-            val rootPath =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                    .toString()
-            val dirName = "/${context.getString(R.string.app_name)}"
-            val fileName = System.currentTimeMillis().toString() + ".png"
-            val savePath = File(rootPath + dirName)
-            savePath.mkdirs()
-
-            val file = File(savePath, fileName)
-            if (file.exists()) file.delete()
-
-            try {
-                val out = FileOutputStream(file)
-                img.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                out.flush()
-                out.close()
-
-                context.sendBroadcast(
-                    Intent(
-                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                        Uri.parse("file://" + Environment.getExternalStorageDirectory())
-                    )
-                )
-                return true
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        return false
+    private fun saveImageToGallery(): String {
+        return MediaStore.Images.Media.insertImage(context.contentResolver, img.bitmap, "${img.information}_${img.information.date}", null)
     }
 
     private fun shareImage() {
-        val bitmapPath = MediaStore.Images.Media.insertImage(context.contentResolver, img.bitmap, "${img.information}_${img.information.date}", null)
-        val bitmapUri = Uri.parse(bitmapPath)
+        val bitmapUri = Uri.parse(saveImageToGallery())
         val intent = Intent(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_STREAM, bitmapUri)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -110,12 +119,20 @@ class FullscreenImgViewDialog(
         AlertDialog.Builder(context)
             .setMessage("정말 삭제하시겠습니까?")
             .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
-                val result = file.delete()
-                if (result) {
-                    Toast.makeText(context, "사진을 삭제했습니다.", Toast.LENGTH_SHORT).show()
-                    parent?.requestReload()
-                    this.cancel()
-                } else Toast.makeText(context, "사진 삭제를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                this@FullscreenImgViewDialog.dismiss()
+
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val result = file.delete()
+                    withContext(Dispatchers.Main) {
+                        if (result) {
+                            Toast.makeText(context, "사진을 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                            parent?.requestReload()
+
+                        } else Toast.makeText(context, "사진 삭제를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
 
             }
             .setNegativeButton(context.getString(R.string.no)) { _, _ -> }

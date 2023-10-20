@@ -1,10 +1,17 @@
 package io.github.jaknndiius.schoolapp
 
 import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -17,7 +24,7 @@ import io.github.jaknndiius.schoolapp.database.*
 import io.github.jaknndiius.schoolapp.database.manager.ExamTableManager
 import io.github.jaknndiius.schoolapp.database.manager.SubjectManager
 import io.github.jaknndiius.schoolapp.database.manager.SubjectTableManager
-import io.github.jaknndiius.schoolapp.enum.Direction
+import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.*
 import io.github.jaknndiius.schoolapp.fragment.timetable.ListFragment
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         lateinit var photoManager: Photo
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,7 +73,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-
                 bottomNavigation.menu.findItem(fragmentId[position]?: R.id.menu_home).isChecked = true
             }
 
@@ -78,6 +83,7 @@ class MainActivity : AppCompatActivity() {
             pager.currentItem = fragmentId.filter { it.value == menuItem.itemId }.keys.first()
             true
         }
+
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -182,10 +188,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == Photo.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val current = adapter.getItem(pager.currentItem)
-            if(current is TimetableFragment) {
-                if(current.currentFragment is ListFragment) {
-                    (current.currentFragment as ListFragment).reloadDialog()
-                }
+            if( current is TimetableFragment && current.currentFragment is ListFragment) {
+                (current.currentFragment as ListFragment).openPhotoFolder()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
