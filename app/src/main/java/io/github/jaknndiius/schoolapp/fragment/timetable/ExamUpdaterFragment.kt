@@ -1,23 +1,37 @@
 package io.github.jaknndiius.schoolapp.fragment.timetable
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
+import io.github.jaknndiius.schoolapp.camera.data.Information
 import io.github.jaknndiius.schoolapp.database.ExamAttr
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.preset.InformationType
+import io.github.jaknndiius.schoolapp.preset.RangeType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.nio.charset.Charset
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ExamUpdaterFragment(
     private val timetableFragment: TimetableFragment,
@@ -28,11 +42,13 @@ class ExamUpdaterFragment(
 
     lateinit var binding: View
 
+    lateinit var adapter: ListViewAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = inflater.inflate(R.layout.timetable_setting_exam_updater, container, false)
 
@@ -50,7 +66,7 @@ class ExamUpdaterFragment(
                     else it.toInt()
                 }
 
-            val currentRanges = getRangeInfos().map { it.findViewById<TextView>(R.id.input_rangeinfo).text.toString() }.filter { it.isNotBlank() }
+            val currentRanges = getRangeInfos()
             val examAttr = subject.examAttr
             if((examAttr == null && (ques0.isNotBlank() || ques1.isNotBlank() || currentRanges.isNotEmpty()))
                     || (examAttr != null && (currentQuestions != examAttr.questionsCount || currentRanges != examAttr.ranges))) {
@@ -68,24 +84,16 @@ class ExamUpdaterFragment(
 
         binding.findViewById<TextView>(R.id.title).text = getString(R.string.setting_set_exam_with_subject, subject.name)
 
-        val rangeInfosLayout: LinearLayout = binding.findViewById(R.id.rangeinfos_layout)
-
-        binding.findViewById<Button>(R.id.add_exam_button).setOnClickListener {
-            rangeInfosLayout.addView(
-                makeRangeInfoLayout(inflater, rangeInfosLayout)
-            )
+        subject.examAttr?.questionsCount?.let { questions ->
+            binding.findViewById<TextView>(R.id.question_count0).text = questions[0].toString()
+            binding.findViewById<TextView>(R.id.question_count1).text = questions[1].toString()
         }
 
-        subject.examAttr?.run {
-            questionsCount?.let {questions ->
-                binding.findViewById<TextView>(R.id.question_count0).text = questions[0].toString()
-                binding.findViewById<TextView>(R.id.question_count1).text = questions[1].toString()
-            }
-            ranges.forEach { range ->
-                rangeInfosLayout.addView(
-                    makeRangeInfoLayout(inflater, rangeInfosLayout, range)
-                )
-            }
+        adapter = loadListView()
+
+        binding.findViewById<Button>(R.id.add_exam_button).setOnClickListener {
+            adapter.addItem()
+            adapter.notifyDataSetChanged()
         }
 
         binding.findViewById<Button>(R.id.attach_exam_button).setOnClickListener {
@@ -103,28 +111,12 @@ class ExamUpdaterFragment(
         return binding
     }
 
-    private fun makeRangeInfoLayout(inflater: LayoutInflater, container: ViewGroup, info: String? = null): View {
-        return inflater.inflate(R.layout.rangeinfo_layout, container, false).apply {
-            contentDescription = RANGEINFO_LAYOUT
-            findViewById<ImageButton>(R.id.delete_line_button).setOnClickListener {
-                container.removeView(this)
-            }
-            if(info != null) findViewById<TextView>(R.id.input_rangeinfo).text = info
-        }
-    }
-
-    private fun getRangeInfos(): List<View> {
-        val outputViews: ArrayList<View> = arrayListOf()
-        try {
-            binding.findViewsWithText(outputViews, RANGEINFO_LAYOUT, LinearLayout.FIND_VIEWS_WITH_CONTENT_DESCRIPTION)
-        } catch (_: Exception) {}
-        return outputViews
-    }
+    private fun getRangeInfos() = adapter.getAll().toList()
 
     private fun save(afterRun: () -> Unit) {
         val question0 = binding.findViewById<TextView>(R.id.question_count0).text.toString()
         val question1 = binding.findViewById<TextView>(R.id.question_count1).text.toString()
-        val ranges = getRangeInfos().map { it.findViewById<TextView>(R.id.input_rangeinfo).text.toString() }
+        val ranges = getRangeInfos()
 
         val examAttr = ExamAttr(
             if(question0.isBlank() && question1.isBlank()) null else listOf(
@@ -132,7 +124,7 @@ class ExamUpdaterFragment(
                 if(question1.isBlank()) 0 else question1.toInt()
             )
         ).apply {
-            this.ranges = ranges
+            this.ranges = getRangeInfos()
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -154,6 +146,86 @@ class ExamUpdaterFragment(
             withContext(Dispatchers.Main) {
                 afterRun()
             }
+        }
+    }
+
+    private fun loadListView(): ListViewAdapter {
+        val listView: ListView = binding.findViewById(R.id.range_list)
+        val adapter = ListViewAdapter()
+        subject.examAttr?.let {
+            it.ranges.forEach { rangeInfo ->
+                adapter.addItem(rangeInfo)
+            }
+        }
+        listView.adapter = adapter
+        return adapter
+    }
+
+    inner class ListViewAdapter: BaseAdapter() {
+        private var rangeList = ArrayList<Pair<RangeType, String>>()
+
+        fun getAll() = rangeList
+
+        override fun getCount(): Int {
+            return rangeList.size
+        }
+
+        override fun getItem(position: Int): Pair<RangeType, String>? {
+            return rangeList[position]
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            return LayoutInflater.from(context).inflate(R.layout.rangeinfo_layout, parent, false).apply {
+                contentDescription = RANGEINFO_LAYOUT
+
+                val item = rangeList[position]
+
+                findViewById<AppCompatButton?>(R.id.range_type_button).apply {
+                    setCompoundDrawablesWithIntrinsicBounds(null, resources.getDrawable(item.first.drawableId), null, null)
+                    text = item.first.korean
+                    setOnClickListener { v ->
+                        PopupMenu(context, v).run {
+                            RangeType.values().forEach { rangeType ->
+                                menu.add(rangeType.korean)
+                            }
+                            setOnMenuItemClickListener { menuItem ->
+                                val rangeType = RangeType.values().first { it.korean == menuItem.title.toString() }
+                                setCompoundDrawablesWithIntrinsicBounds(null, resources.getDrawable(rangeType.drawableId), null, null)
+                                text = rangeType.korean
+                                rangeList[position] = rangeType to item.second
+                                false
+                            }
+                            show()
+                        }
+                    }
+                }
+
+                findViewById<EditText?>(R.id.input_range_info).apply {
+                    setText(item.second)
+                    addTextChangedListener(object : TextWatcher {
+                        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
+
+                        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+
+                        override fun afterTextChanged(s: Editable) {
+                            rangeList[position] = item.first to s.toString()
+                        }
+                    })
+                }
+
+                findViewById<ImageButton>(R.id.delete_line_button).setOnClickListener {
+                    rangeList.removeAt(position)
+                    this@ListViewAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        fun addItem(value: Pair<RangeType, String>? = null) {
+            rangeList.add(value ?: (RangeType.TEXTBOOK to ""))
         }
     }
 

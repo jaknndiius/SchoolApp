@@ -4,7 +4,7 @@
     <string name="app_subtitle">학교 생활의 모든 것</string>
     <string name="home">홈</string>
     <string name="timetable">시간표</string>
-    <string name="schedule">스케쥴</string>
+    <string name="schedule">일정</string>
     <string name="bite_calculator">바이트 계산기</string>
     <string name="string_length">글자수</string>
     <string name="bite_length">바이트</string>
@@ -23,7 +23,9 @@
     <string name="generate_subject">과목 추가하기</string>
     <string name="delete_subject">과목 삭제하기</string>
     <string name="delete_subject_with_count">과목 삭제하기(%d개)</string>
-
+    <string name="exam_info_with_subject">%s 시험 정보</string>
+    <string name="gakgwan_with_count">객관식 %d개</string>
+    <string name="sursul_with_count">서술형 %d개</string>
 
     <string name="detach_exam">시험 정보 제거하기</string>
     <string name="attach_exam">과목 정보 설정하기</string>
@@ -59,6 +61,7 @@
     <string name="say_added_exam">시험 일정이 추가되었습니다.</string>
     <string name="say_already_existing_exam">이미 존재하는 일정입니다.</string>
     <string name="say_no_pictures">저장된 사진이 없습니다.</string>
+    <string name="say_no_examInfo">해당 과목은 시험 정보가 없습니다.</string>
 
     <string name="ask_really_delete_subject">체크한 모든 과목을 삭제하시겠습니까?</string>
     <string name="ask_save_at_weekday">해당 과목들을 %s요일에 설정하시겠습니까?</string>

@@ -1,17 +1,9 @@
 package io.github.jaknndiius.schoolapp
 
-import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -27,18 +19,18 @@ import io.github.jaknndiius.schoolapp.database.manager.SubjectTableManager
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.*
 import io.github.jaknndiius.schoolapp.fragment.timetable.ListFragment
+import io.github.jaknndiius.schoolapp.preset.RangeType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.*
 
 class MainActivity : AppCompatActivity() {
 
     private val fragmentId = mapOf(0 to R.id.menu_home, 1 to R.id.menu_timetable, 2 to R.id.menu_schedule, 3 to R.id.menu_bite_calculator)
 
     private val SUBJECT_DATABASE = "subject-database"
-    private val SUBJECT_TABLE_DATABASSE = "subject-table-database"
-    private val EXAM_TABLE_DATABASSE = "exam-table-database"
+    private val SUBJECT_TABLE_DATABASE = "subject-table-database"
+    private val EXAM_TABLE_DATABASE = "exam-table-database"
 
     lateinit var adapter: Adapter
     lateinit var pager: ViewPager
@@ -107,14 +99,14 @@ class MainActivity : AppCompatActivity() {
 
         val subjectTableDatabase = Room.databaseBuilder(
             applicationContext,
-            SubjectTableDatabase::class.java, SUBJECT_TABLE_DATABASSE
+            SubjectTableDatabase::class.java, SUBJECT_TABLE_DATABASE
         ).build()
         val subjectTableDao = subjectTableDatabase.subjectTableDao()
         subjectTableManager = SubjectTableManager(subjectTableDao, subjectManager)
 
         val examTableDatabase = Room.databaseBuilder(
             applicationContext,
-            ExamTableDatabase::class.java, EXAM_TABLE_DATABASSE
+            ExamTableDatabase::class.java, EXAM_TABLE_DATABASE
         ).build()
         val examTableDao = examTableDatabase.examTableDao()
         examTableManager = ExamTableManager(examTableDao, subjectManager)
@@ -144,6 +136,19 @@ class MainActivity : AppCompatActivity() {
             subjectManager.define("일본어", "김희인")
 
             subjectManager.define("창체", "장인석")
+
+            subjectManager.attachExam("영어1", ExamAttr(listOf(10,1)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "p1~21", RangeType.PAPER to "12장", RangeType.SUBBOOK to "P3~12", RangeType.OTHER to "수업 첨부 파일 확인수업 첨부 파일 확인수업 첨부 파일 확인수업 첨부 파일 확인")
+            })
+
+            subjectManager.attachExam("영어2", ExamAttr(listOf(10,1)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "범위는", RangeType.SUBBOOK to "부교재")
+
+            })
+
+            subjectManager.attachExam("문학3", ExamAttr(listOf(102,133)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "범위는", RangeType.PAPER to "학습지")
+            })
 
             subjectTableManager.addOrUpdate(WeekDay.MONDAY,
                 listOf("문학1", "영어2", "수학1", "창체", "수학2", "음악", "지구과학")

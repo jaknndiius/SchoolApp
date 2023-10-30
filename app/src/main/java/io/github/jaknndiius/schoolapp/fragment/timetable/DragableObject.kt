@@ -78,7 +78,7 @@ class DraggableObject(
                 DragEvent.ACTION_DROP -> true
                 DragEvent.ACTION_DRAG_ENDED -> {
                     if(!e.result) Toast.makeText(binding.context, context?.getString(R.string.request_right_drag), Toast.LENGTH_SHORT).show()
-                    tableLayout.removeView(blank)
+                    reloadTable()
                     true
                 }
                 else -> false
@@ -94,7 +94,7 @@ class DraggableObject(
         return currentSetting.get()
     }
 
-    fun addToTable(subjectNames: List<String>) {
+    private fun addToTable(subjectNames: List<String>) {
         if(subjectNames.isEmpty()) {
             tableLayout.addView(blank)
         } else {
@@ -105,7 +105,7 @@ class DraggableObject(
 
     }
 
-    fun reloadTable() {
+    private fun reloadTable() {
         clearTable()
         addToTable(getSettings())
         onReload()

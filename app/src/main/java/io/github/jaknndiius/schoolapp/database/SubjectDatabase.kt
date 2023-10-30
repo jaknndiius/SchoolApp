@@ -2,29 +2,41 @@ package io.github.jaknndiius.schoolapp.database
 
 import androidx.room.*
 import com.google.gson.Gson
-
-//@Entity
-//data class Subject(
-//    @PrimaryKey val name: String,
-//    @ColumnInfo(name = "teacher_name") val teacherName: String?
-//)
-
+import io.github.jaknndiius.schoolapp.preset.RangeType
 
 class ExamAttr(
     val questionsCount: List<Int>? = null
 ) {
-    var ranges: List<String> = listOf()
+    var ranges: List<Pair<RangeType, String>> = listOf()
+
+    fun convert() = ConvertedExamAttr(
+        questionsCount,
+        ranges.map { pair ->
+            pair.first.name to pair.second
+        }
+    )
+}
+
+class ConvertedExamAttr(
+    private val questionsCount: List<Int>?,
+    private val convertedRanges: List<Pair<String, String>>
+) {
+    fun restore() = ExamAttr(questionsCount).apply {
+        ranges = convertedRanges.map { pair ->
+            RangeType.valueOf(pair.first) to pair.second
+        }
+    }
 }
 
 class ExamAttrConverts {
     @TypeConverter
     fun examToJson(value: ExamAttr?): String? {
-        return Gson().toJson(value)
+        return value?.let { Gson().toJson(value.convert()) }
     }
 
     @TypeConverter
-    fun jsonToExam(value: String): ExamAttr? {
-        return Gson().fromJson(value, ExamAttr::class.java)
+    fun jsonToExam(value: String?): ExamAttr? {
+        return value?.let { Gson().fromJson(value, ConvertedExamAttr::class.java).restore() }
     }
 }
 @Entity
@@ -33,7 +45,6 @@ data class Subject(
     @ColumnInfo(name = "teacher_name") val teacherName: String?,
     @ColumnInfo(name = "exam_attr") var examAttr: ExamAttr? = null
 )
-
 @Dao
 interface SubjectDao {
     @Query("SELECT * FROM subject")
