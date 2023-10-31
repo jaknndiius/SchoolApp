@@ -12,13 +12,18 @@ import androidx.fragment.app.FragmentTransaction
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.schedule.ListFragment
+import io.github.jaknndiius.schoolapp.fragment.schedule.ScheduleGeneratorFragment
+import io.github.jaknndiius.schoolapp.fragment.timetable.*
+import io.github.jaknndiius.schoolapp.preset.ScheduleFragmentType
+import io.github.jaknndiius.schoolapp.preset.TimetableFragmentType
 
 class ScheduleFragment : Fragment(), MainFragment {
 
-    lateinit var currentFragment: Fragment
+    private lateinit var fragments: Map<ScheduleFragmentType, Fragment>
+    private lateinit var currentFragment: Fragment
     lateinit var binding: View
 
-    private fun changeFragment(fragment: Fragment, direction: Direction) {
+    private fun changeFragment(fragment: Fragment, direction: Direction, backStack: Boolean = true) {
 
         currentFragment = fragment
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
@@ -27,20 +32,35 @@ class ScheduleFragment : Fragment(), MainFragment {
             Direction.PREVIOUS -> transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_right)
             Direction.NEXT_VERTICAL -> transaction.setCustomAnimations(R.anim.enter_from_below, R.anim.fade_out)
             Direction.PREVIOUS_VERTICAL -> transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_below)
-            else -> {}
+            else -> transaction
+        }.replace(R.id.schedule_container, fragment).run {
+            if(backStack) addToBackStack(null)
+            commit()
         }
-        transaction.replace(R.id.schedule_container, fragment).addToBackStack(null).commit()
+    }
+
+    fun openScheduleList(direction: Direction) {
+        changeFragment(fragments[ScheduleFragmentType.LIST_FRAGMENT]!!, direction, false)
+    }
+
+    fun openScheduleGenerator(direction: Direction) {
+        changeFragment(fragments[ScheduleFragmentType.SCHEDULE_GENERATOR]!!, direction)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = inflater.inflate(R.layout.fragment_schedule, container, false)
 
-        parentFragmentManager.beginTransaction().replace(R.id.schedule_container, ListFragment()).commit()
+        fragments = mapOf(
+            ScheduleFragmentType.LIST_FRAGMENT to ListFragment(this),
+            ScheduleFragmentType.SCHEDULE_GENERATOR to ScheduleGeneratorFragment(this)
+        )
 
+//        openScheduleList(Direction.NONE)
+        openScheduleGenerator(Direction.NONE)
         return binding
     }
 

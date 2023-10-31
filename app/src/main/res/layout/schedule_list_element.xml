@@ -2,72 +2,81 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_margin="15dp"
-    android:background="@drawable/bg_white_c10"
-    android:orientation="horizontal"
-    android:translationZ="10dp"
-    android:padding="15dp">
+    android:layout_height="100dp">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="5"
-        android:layout_gravity="center"
-        android:layout_marginRight="10dp">
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6월 5일"
-            android:textColor="@color/green"
-            android:textSize="18dp"/>
-        <TextView
-            android:id="@+id/class_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="7교시"
-            android:textColor="@color/light_green"
-            android:textSize="14dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/schedule_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="18"
-        android:layout_gravity="center">
-        <TextView
-            android:id="@+id/subject_name"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:text="지구과학"
-            android:textColor="@color/green"
-            android:textSize="22dp"
-            android:maxLines="1" />
-        <TextView
-            android:id="@+id/info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="한반도의 지질구조 등등등abc"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="@color/light_green"
-            android:textSize="15dp"/>
-    </LinearLayout>
+        android:background="@drawable/bg_white_c10"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="6dp"
+        android:translationZ="5dp"
+        android:padding="15dp">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="2"
-        android:layout_gravity="center">
-        <CheckBox
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:buttonTint="@drawable/selector_color_checkbox"
-            />
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp">
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12월 15일"
+                android:textColor="@color/green"
+                android:textSize="18dp"
+                android:textFontWeight="500"/>
+            <TextView
+                android:id="@+id/class_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7교시"
+                android:textColor="@color/light_green"
+                android:textSize="14dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_gravity="center">
+            <TextView
+                android:id="@+id/subject_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지구과학"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/green"
+                android:textSize="22dp"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="한반도의 지질구조 등등등abc"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/light_green"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <CheckBox
+                android:id="@+id/alarm_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@drawable/selector_color_checkbox"
+                android:checked="true"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

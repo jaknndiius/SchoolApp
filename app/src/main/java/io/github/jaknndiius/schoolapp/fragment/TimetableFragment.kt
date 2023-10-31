@@ -24,17 +24,13 @@ class TimetableFragment : Fragment(), MainFragment {
 
         currentFragment = fragment
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-        if(direction == Direction.NEXT) {
-            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.fade_out)
-        } else if(direction == Direction.PREVIOUS) {
-            transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_right)
-        } else if(direction == Direction.NEXT_VERTICAL) {
-            transaction.setCustomAnimations(R.anim.enter_from_below, R.anim.fade_out)
-        } else if(direction == Direction.PREVIOUS_VERTICAL) {
-            transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_below)
-        }
-
-        transaction.replace(R.id.timetable_container, fragment).run {
+        when(direction) {
+            Direction.NEXT -> transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.fade_out)
+            Direction.PREVIOUS -> transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_right)
+            Direction.NEXT_VERTICAL -> transaction.setCustomAnimations(R.anim.enter_from_below, R.anim.fade_out)
+            Direction.PREVIOUS_VERTICAL -> transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_below)
+            else -> transaction
+        }.replace(R.id.timetable_container, fragment).run {
             if(backStack) addToBackStack(null)
             commit()
         }

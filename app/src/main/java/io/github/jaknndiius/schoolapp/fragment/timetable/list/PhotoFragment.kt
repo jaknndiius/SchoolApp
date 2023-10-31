@@ -21,6 +21,7 @@ import io.github.jaknndiius.schoolapp.camera.data.Information
 import io.github.jaknndiius.schoolapp.dialog.ImgViewDialog
 import io.github.jaknndiius.schoolapp.dialog.PhotoTypeDialog
 import io.github.jaknndiius.schoolapp.preset.InformationType
+import io.github.jaknndiius.schoolapp.view.ListViewAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ class PhotoFragment: Fragment() {
         binding = inflater.inflate(R.layout.timetable_list_photo, container, false)
         val listView: ListView = binding.findViewById(R.id.folder_list)
 
-        val adapter = ListViewAdapter(inflater)
+        val adapter = PhotoListAdapter()
 
         CoroutineScope(Dispatchers.IO).launch {
             val subjects = MainActivity.subjectManager.getAll()
@@ -57,20 +58,13 @@ class PhotoFragment: Fragment() {
         return binding
     }
 
-    inner class ListViewAdapter(
-        val inflater: LayoutInflater
-    ): BaseAdapter() {
-        private var listViewItemList = ArrayList<String>()
-
-        override fun getCount(): Int {
-            return listViewItemList.size
-        }
+    inner class PhotoListAdapter: ListViewAdapter<String>() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-            val subjectName = listViewItemList[position]
+            val subjectName = getItem(position)
 
-            val view = inflater.inflate(R.layout.timetable_list_photo_folder, parent, false)
+            val view = LayoutInflater.from(context).inflate(R.layout.timetable_list_photo_folder, parent, false)
             view.findViewById<TextView>(R.id.subject_name).text = subjectName
             view.findViewById<ConstraintLayout>(R.id.background).setOnClickListener {
                 askTypeAndRun { index ->
@@ -82,7 +76,6 @@ class PhotoFragment: Fragment() {
                         }
                     )
                 }
-
             }
             view.findViewById<AppCompatButton>(R.id.take_photo_button).setOnClickListener {
                 askTypeAndRun { index ->
@@ -101,18 +94,6 @@ class PhotoFragment: Fragment() {
             }
 
             return view
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getItem(position: Int): Any {
-            return listViewItemList[position]
-        }
-
-        fun addItem(subjectName: String) {
-            listViewItemList.add(subjectName)
         }
     }
 

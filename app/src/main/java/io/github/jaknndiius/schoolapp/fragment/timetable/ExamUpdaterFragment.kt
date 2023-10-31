@@ -1,29 +1,26 @@
 package io.github.jaknndiius.schoolapp.fragment.timetable
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
-import io.github.jaknndiius.schoolapp.camera.data.Information
 import io.github.jaknndiius.schoolapp.database.ExamAttr
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
-import io.github.jaknndiius.schoolapp.preset.InformationType
 import io.github.jaknndiius.schoolapp.preset.RangeType
+import io.github.jaknndiius.schoolapp.view.ListViewAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +29,7 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ExamUpdaterFragment(
     private val timetableFragment: TimetableFragment,
@@ -42,7 +40,7 @@ class ExamUpdaterFragment(
 
     lateinit var binding: View
 
-    lateinit var adapter: ListViewAdapter
+    lateinit var adapter: ExamListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,7 +90,7 @@ class ExamUpdaterFragment(
         adapter = loadListView()
 
         binding.findViewById<Button>(R.id.add_exam_button).setOnClickListener {
-            adapter.addItem()
+            adapter.addItem(RangeType.TEXTBOOK to "")
             adapter.notifyDataSetChanged()
         }
 
@@ -111,7 +109,7 @@ class ExamUpdaterFragment(
         return binding
     }
 
-    private fun getRangeInfos() = adapter.getAll().toList()
+    private fun getRangeInfos() = adapter.getList()
 
     private fun save(afterRun: () -> Unit) {
         val question0 = binding.findViewById<TextView>(R.id.question_count0).text.toString()
@@ -149,9 +147,10 @@ class ExamUpdaterFragment(
         }
     }
 
-    private fun loadListView(): ListViewAdapter {
+    private fun loadListView(): ExamListAdapter {
         val listView: ListView = binding.findViewById(R.id.range_list)
-        val adapter = ListViewAdapter()
+        val adapter = ExamListAdapter()
+
         subject.examAttr?.let {
             it.ranges.forEach { rangeInfo ->
                 adapter.addItem(rangeInfo)
@@ -161,24 +160,13 @@ class ExamUpdaterFragment(
         return adapter
     }
 
-    inner class ListViewAdapter: BaseAdapter() {
-        private var rangeList = ArrayList<Pair<RangeType, String>>()
-
-        fun getAll() = rangeList
-
-        override fun getCount(): Int {
-            return rangeList.size
-        }
-
-        override fun getItem(position: Int): Pair<RangeType, String>? {
-            return rangeList[position]
-        }
+    inner class ExamListAdapter: ListViewAdapter<Pair<RangeType, String>>() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             return LayoutInflater.from(context).inflate(R.layout.rangeinfo_layout, parent, false).apply {
                 contentDescription = RANGEINFO_LAYOUT
 
-                val item = rangeList[position]
+                val item = getItem(position)
 
                 findViewById<AppCompatButton?>(R.id.range_type_button).apply {
                     setCompoundDrawablesWithIntrinsicBounds(null, resources.getDrawable(item.first.drawableId), null, null)
@@ -192,7 +180,7 @@ class ExamUpdaterFragment(
                                 val rangeType = RangeType.values().first { it.korean == menuItem.title.toString() }
                                 setCompoundDrawablesWithIntrinsicBounds(null, resources.getDrawable(rangeType.drawableId), null, null)
                                 text = rangeType.korean
-                                rangeList[position] = rangeType to item.second
+                                modifyItem(position, rangeType to getItem(position).second)
                                 false
                             }
                             show()
@@ -208,24 +196,16 @@ class ExamUpdaterFragment(
                         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
 
                         override fun afterTextChanged(s: Editable) {
-                            rangeList[position] = item.first to s.toString()
+                            modifyItem(position, getItem(position).first to s.toString())
                         }
                     })
                 }
 
                 findViewById<ImageButton>(R.id.delete_line_button).setOnClickListener {
-                    rangeList.removeAt(position)
-                    this@ListViewAdapter.notifyDataSetChanged()
+                    removeItem(position)
+                    this@ExamListAdapter.notifyDataSetChanged()
                 }
             }
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        fun addItem(value: Pair<RangeType, String>? = null) {
-            rangeList.add(value ?: (RangeType.TEXTBOOK to ""))
         }
     }
 
