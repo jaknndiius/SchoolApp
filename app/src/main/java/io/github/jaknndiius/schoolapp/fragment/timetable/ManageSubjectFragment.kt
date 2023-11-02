@@ -17,11 +17,12 @@ import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.fragment.objects.BackPressableFragment
 import kotlinx.coroutines.*
 
 class ManageSubjectFragment(
     private val timetableFragment: TimetableFragment
-) : Fragment() {
+) : BackPressableFragment() {
 
     private var isSelectMod = false
 
@@ -29,11 +30,16 @@ class ManageSubjectFragment(
     lateinit var inflater: LayoutInflater
     lateinit var editButton: EditButton
 
+    override fun onPressBack() {
+        if(isSelectMod) leaveSelectMod()
+        else timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = inflater.inflate(R.layout.timetable_setting_manage_subject, container, false)
         this.inflater = inflater
         editButton = EditButton()

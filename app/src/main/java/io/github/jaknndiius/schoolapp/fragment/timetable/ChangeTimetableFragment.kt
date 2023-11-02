@@ -14,6 +14,7 @@ import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.WeekDay
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.fragment.objects.BackPressableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ import kotlinx.coroutines.withContext
 
 class ChangeTimetableFragment(
     private val timetableFragment: TimetableFragment
-) : Fragment() {
+) : BackPressableFragment() {
 
     lateinit var weekday: Array<String>
 
@@ -29,6 +30,18 @@ class ChangeTimetableFragment(
     lateinit var inflater: LayoutInflater
 
     lateinit var draggableObject: DraggableObject
+
+    override fun onPressBack() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val isChanged = settingIsChanged()
+            withContext(Dispatchers.Main) {
+                if(isChanged) askAndRun(getString(R.string.ask_really_leave_without_save), DialogInterface.OnClickListener { _, _ ->
+                    timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+                })
+                else timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,15 +56,7 @@ class ChangeTimetableFragment(
         binding = inflater.inflate(R.layout.timetable_setting_change_timetable, container, false)
 
         binding.findViewById<AppCompatButton>(R.id.back_button).setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val isChanged = settingIsChanged()
-                withContext(Dispatchers.Main) {
-                   if(isChanged) askAndRun(getString(R.string.ask_really_leave_without_save), DialogInterface.OnClickListener { _, _ ->
-                           timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
-                       })
-                   else timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
-                }
-            }
+            onPressBack()
         }
 
         draggableObject = DraggableObject(context, inflater, binding, binding.findViewById(R.id.subject_layout))

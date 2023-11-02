@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.schedule.ListFragment
@@ -16,6 +18,10 @@ import io.github.jaknndiius.schoolapp.fragment.schedule.ScheduleGeneratorFragmen
 import io.github.jaknndiius.schoolapp.fragment.timetable.*
 import io.github.jaknndiius.schoolapp.preset.ScheduleFragmentType
 import io.github.jaknndiius.schoolapp.preset.TimetableFragmentType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ScheduleFragment : Fragment(), MainFragment {
 
@@ -23,7 +29,7 @@ class ScheduleFragment : Fragment(), MainFragment {
     private lateinit var currentFragment: Fragment
     lateinit var binding: View
 
-    private fun changeFragment(fragment: Fragment, direction: Direction, backStack: Boolean = true) {
+    private fun changeFragment(fragment: Fragment, direction: Direction) {
 
         currentFragment = fragment
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
@@ -33,18 +39,24 @@ class ScheduleFragment : Fragment(), MainFragment {
             Direction.NEXT_VERTICAL -> transaction.setCustomAnimations(R.anim.enter_from_below, R.anim.fade_out)
             Direction.PREVIOUS_VERTICAL -> transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_below)
             else -> transaction
-        }.replace(R.id.schedule_container, fragment).run {
-            if(backStack) addToBackStack(null)
-            commit()
-        }
+        }.replace(R.id.schedule_container, fragment).commit()
     }
 
     fun openScheduleList(direction: Direction) {
-        changeFragment(fragments[ScheduleFragmentType.LIST_FRAGMENT]!!, direction, false)
+        CoroutineScope(Dispatchers.IO).launch {
+            val schedules = MainActivity.scheduleManager.getAll()
+            withContext(Dispatchers.Main) {
+                if(schedules.isEmpty()) {
+                    openScheduleGenerator(Direction.NONE)
+                    if(direction != Direction.NONE) Toast.makeText(context, "저장된 일정이 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+                else changeFragment(fragments[ScheduleFragmentType.LIST_FRAGMENT]!!, direction)
+            }
+        }
     }
 
     fun openScheduleGenerator(direction: Direction) {
-        changeFragment(fragments[ScheduleFragmentType.SCHEDULE_GENERATOR]!!, direction)
+        changeFragment(ScheduleGeneratorFragment(this), direction)
     }
 
     override fun onCreateView(
@@ -55,12 +67,10 @@ class ScheduleFragment : Fragment(), MainFragment {
         binding = inflater.inflate(R.layout.fragment_schedule, container, false)
 
         fragments = mapOf(
-            ScheduleFragmentType.LIST_FRAGMENT to ListFragment(this),
-            ScheduleFragmentType.SCHEDULE_GENERATOR to ScheduleGeneratorFragment(this)
+            ScheduleFragmentType.LIST_FRAGMENT to ListFragment(this)
         )
 
-//        openScheduleList(Direction.NONE)
-        openScheduleGenerator(Direction.NONE)
+        openScheduleList(Direction.NONE)
         return binding
     }
 

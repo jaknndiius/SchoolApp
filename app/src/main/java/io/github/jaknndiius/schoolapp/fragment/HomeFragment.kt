@@ -18,12 +18,8 @@ class HomeFragment : Fragment(), MainFragment {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = inflater.inflate(R.layout.fragment_home, container, false)
-
-        binding.findViewById<AppCompatButton>(R.id.camera).setOnClickListener {
-
-        }
 
         return binding
     }

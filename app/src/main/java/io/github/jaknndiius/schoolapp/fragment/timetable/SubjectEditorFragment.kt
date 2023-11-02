@@ -17,6 +17,7 @@ import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.fragment.objects.BackPressableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,9 +26,14 @@ import kotlinx.coroutines.withContext
 class SubjectEditorFragment(
     private val timetableFragment: TimetableFragment,
     private val currentSubject: Subject? = null
-) : Fragment() {
+) : BackPressableFragment() {
 
     lateinit var binding: View
+
+    override fun onPressBack() {
+        timetableFragment.openSubjectManagement(Direction.PREVIOUS_VERTICAL)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +42,7 @@ class SubjectEditorFragment(
     ): View {
         binding = inflater.inflate(R.layout.timetable_setting_subject_editor, container, false)
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
-            timetableFragment.openSubjectManagement(Direction.PREVIOUS_VERTICAL)
+            onPressBack()
         }
         if(currentSubject == null) setModeToGenerator()
         else setModeToEditor()

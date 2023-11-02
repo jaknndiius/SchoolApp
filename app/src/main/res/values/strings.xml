@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">SchoolApp</string>
-    <string name="app_title">ALLINONE</string>
-    <string name="app_subtitle">학교 생활의 모든 것</string>
+    <string name="app_title">Timetable</string>
+<!--    ALLINONE 학교 생활의 모든 것 -->
+    <string name="app_subtitle">For your wise school school life</string>
     <string name="home">홈</string>
     <string name="timetable">시간표</string>
     <string name="schedule">일정</string>
@@ -26,6 +27,9 @@
     <string name="exam_info_with_subject">%s 시험 정보</string>
     <string name="gakgwan_with_count">객관식 %d개</string>
     <string name="sursul_with_count">서술형 %d개</string>
+    <string name="setting_add_schedule">일정 추가하기</string>
+    <string name="title">제목</string>
+    <string name="details">세부사항</string>
 
     <string name="detach_exam">시험 정보 제거하기</string>
     <string name="attach_exam">과목 정보 설정하기</string>

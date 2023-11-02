@@ -90,15 +90,16 @@
         android:id="@+id/generate_subject_button"
         android:layout_width="290dp"
         android:layout_height="40dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/bg_white_c4_b1green"
+        android:textColor="@color/green"
         android:textFontWeight="400"
         android:textSize="14dp"
-        android:textColor="@color/green"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/bg_white_c4_b1green"
         android:translationZ="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teacher_name_layout"/>
+        app:layout_constraintTop_toBottomOf="@+id/teacher_name_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

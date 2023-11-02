@@ -16,6 +16,7 @@ import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.preset.AskResult
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.fragment.objects.BackPressableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,13 +24,17 @@ import kotlinx.coroutines.withContext
 
 class ExamTimetableChangerFragment(
     private val timetableFragment: TimetableFragment
-) : Fragment() {
+) : BackPressableFragment() {
 
     lateinit var binding: View
 
     lateinit var draggableObject: DraggableObject
 
     private var dayId = 0
+
+    override fun onPressBack() {
+        timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +45,7 @@ class ExamTimetableChangerFragment(
         binding = inflater.inflate(R.layout.timetable_setting_set_exam_timetable, container, false)
 
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
-            timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+            onPressBack()
         }
 
         draggableObject = DraggableObject(context, inflater, binding, binding.findViewById(R.id.subject_layout))

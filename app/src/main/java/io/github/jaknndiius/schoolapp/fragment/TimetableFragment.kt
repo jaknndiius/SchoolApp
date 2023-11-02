@@ -30,23 +30,17 @@ class TimetableFragment : Fragment(), MainFragment {
             Direction.NEXT_VERTICAL -> transaction.setCustomAnimations(R.anim.enter_from_below, R.anim.fade_out)
             Direction.PREVIOUS_VERTICAL -> transaction.setCustomAnimations(R.anim.fade_in, R.anim.exit_to_below)
             else -> transaction
-        }.replace(R.id.timetable_container, fragment).run {
-            if(backStack) addToBackStack(null)
-            commit()
-        }
+        }.replace(R.id.timetable_container, fragment).commit()
     }
 
     fun openTimetableList(direction: Direction) {
-//        changeFragment(ListFragment(this), direction, false)
-        changeFragment(fragments[TimetableFragmentType.LIST_FRAGMENT]!!, direction, false)
+        changeFragment(fragments[TimetableFragmentType.LIST_FRAGMENT]!!, direction)
 
     }
     fun openTimetableSetting(direction: Direction) {
-//        changeFragment(SettingFragment(this), direction)
         changeFragment(fragments[TimetableFragmentType.SETTING_FRAGMENT]!!, direction)
     }
     fun openSubjectManagement(direction: Direction) {
-//        changeFragment(ManageSubjectFragment(this), direction)
         changeFragment(fragments[TimetableFragmentType.MANAGE_SUBJECT_FRAGMENT]!!, direction)
 
     }
@@ -54,12 +48,10 @@ class TimetableFragment : Fragment(), MainFragment {
         changeFragment(SubjectEditorFragment(this, currentSubject), direction)
     }
     fun openTimetableChanger(direction: Direction) {
-//        changeFragment(ChangeTimetableFragment(this), direction)
         changeFragment(fragments[TimetableFragmentType.CHANGE_TIMETABLE_FRAGMENT]!!, direction)
 
     }
     fun openExamSetter(direction: Direction) {
-//        changeFragment(ExamSetterFragment(this), direction)
         changeFragment(fragments[TimetableFragmentType.EXAM_SETTER_FRAGMENT]!!, direction)
     }
 
@@ -69,7 +61,6 @@ class TimetableFragment : Fragment(), MainFragment {
     }
 
     fun openExamTimetableChanger(direction: Direction) {
-//        changeFragment(ExamTimetableChangerFragment(this), direction)
         changeFragment(fragments[TimetableFragmentType.EXAM_TIMETABLE_CHANGER_FRAGMENT]!!, direction)
     }
 

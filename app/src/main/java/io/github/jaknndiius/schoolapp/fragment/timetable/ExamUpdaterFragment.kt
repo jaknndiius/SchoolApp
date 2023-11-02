@@ -19,6 +19,7 @@ import io.github.jaknndiius.schoolapp.database.ExamAttr
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.fragment.objects.BackPressableFragment
 import io.github.jaknndiius.schoolapp.preset.RangeType
 import io.github.jaknndiius.schoolapp.view.ListViewAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -34,13 +35,42 @@ import kotlin.collections.HashMap
 class ExamUpdaterFragment(
     private val timetableFragment: TimetableFragment,
     private val subject: Subject
-) : Fragment() {
+) : BackPressableFragment() {
 
     private val RANGEINFO_LAYOUT = "rangeinfoLayout"
 
     lateinit var binding: View
 
     lateinit var adapter: ExamListAdapter
+
+    override fun onPressBack() {
+        val ques0 = binding.findViewById<TextView>(R.id.question_count0).text.toString()
+        val ques1 = binding.findViewById<TextView>(R.id.question_count1).text.toString()
+
+        val currentQuestions =
+            if(ques0.isBlank() && ques1.isBlank()) null
+            else listOf(
+                ques0, ques1
+            ).map {
+                if(it.isBlank()) 0
+                else it.toInt()
+            }
+
+        val currentRanges = getRangeInfos()
+        val examAttr = subject.examAttr
+        if((examAttr == null && (ques0.isNotBlank() || ques1.isNotBlank() || currentRanges.isNotEmpty()))
+            || (examAttr != null && (currentQuestions != examAttr.questionsCount || currentRanges != examAttr.ranges))) {
+            AlertDialog.Builder(context)
+                .setMessage(resources.getString(R.string.ask_really_leave_without_save))
+                .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                    timetableFragment.openExamSetter(Direction.PREVIOUS_VERTICAL)
+                })
+                .setNegativeButton(getString(R.string.no),  null)
+                .show()
+        } else {
+            timetableFragment.openExamSetter(Direction.PREVIOUS_VERTICAL)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,33 +81,7 @@ class ExamUpdaterFragment(
         binding = inflater.inflate(R.layout.timetable_setting_exam_updater, container, false)
 
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
-
-            val ques0 = binding.findViewById<TextView>(R.id.question_count0).text.toString()
-            val ques1 = binding.findViewById<TextView>(R.id.question_count1).text.toString()
-
-            val currentQuestions =
-                if(ques0.isBlank() && ques1.isBlank()) null
-                else listOf(
-                    ques0, ques1
-                ).map {
-                    if(it.isBlank()) 0
-                    else it.toInt()
-                }
-
-            val currentRanges = getRangeInfos()
-            val examAttr = subject.examAttr
-            if((examAttr == null && (ques0.isNotBlank() || ques1.isNotBlank() || currentRanges.isNotEmpty()))
-                    || (examAttr != null && (currentQuestions != examAttr.questionsCount || currentRanges != examAttr.ranges))) {
-                AlertDialog.Builder(context)
-                    .setMessage(resources.getString(R.string.ask_really_leave_without_save))
-                    .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
-                        timetableFragment.openExamSetter(Direction.PREVIOUS_VERTICAL)
-                    })
-                    .setNegativeButton(getString(R.string.no),  null)
-                    .show()
-            } else {
-                timetableFragment.openExamSetter(Direction.PREVIOUS_VERTICAL)
-            }
+            onPressBack()
         }
 
         binding.findViewById<TextView>(R.id.title).text = getString(R.string.setting_set_exam_with_subject, subject.name)

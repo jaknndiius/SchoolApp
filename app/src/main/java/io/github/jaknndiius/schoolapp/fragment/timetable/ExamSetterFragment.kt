@@ -11,6 +11,7 @@ import io.github.jaknndiius.schoolapp.R
 import io.github.jaknndiius.schoolapp.database.Subject
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.TimetableFragment
+import io.github.jaknndiius.schoolapp.fragment.objects.BackPressableFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,22 +19,26 @@ import kotlinx.coroutines.withContext
 
 class ExamSetterFragment(
     private val timetableFragment: TimetableFragment,
-) : Fragment() {
+) : BackPressableFragment() {
 
     private lateinit var binding: View
     private lateinit var inflater: LayoutInflater
+
+    override fun onPressBack() {
+        timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = inflater.inflate(R.layout.timetable_setting_set_exam, container, false)
         this.inflater = inflater
 
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
-            timetableFragment.openTimetableSetting(Direction.PREVIOUS_VERTICAL)
+            onPressBack()
         }
 
         reloadSubjects()
