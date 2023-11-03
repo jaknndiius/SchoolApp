@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
+import io.github.jaknndiius.schoolapp.database.Schedule
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.schedule.ListFragment
 import io.github.jaknndiius.schoolapp.fragment.schedule.ScheduleGeneratorFragment
+import io.github.jaknndiius.schoolapp.fragment.schedule.ScheduleModifierFragment
 import io.github.jaknndiius.schoolapp.fragment.timetable.*
 import io.github.jaknndiius.schoolapp.preset.ScheduleFragmentType
 import io.github.jaknndiius.schoolapp.preset.TimetableFragmentType
@@ -57,6 +59,10 @@ class ScheduleFragment : Fragment(), MainFragment {
 
     fun openScheduleGenerator(direction: Direction) {
         changeFragment(ScheduleGeneratorFragment(this), direction)
+    }
+
+    fun openScheduleModifier(direction: Direction, schedule: Schedule) {
+        changeFragment(ScheduleModifierFragment(this, schedule), direction)
     }
 
     override fun onCreateView(

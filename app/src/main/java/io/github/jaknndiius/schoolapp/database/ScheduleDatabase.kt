@@ -6,9 +6,10 @@ import io.github.jaknndiius.schoolapp.preset.RangeType
 
 @Entity
 data class Schedule(
-    @PrimaryKey val name: String,
+    @PrimaryKey val id: Long,
+    @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "detail") val detail: String,
-    @ColumnInfo(name = "date") var date: String,
+    @ColumnInfo(name = "date") var date: Long,
     @ColumnInfo(name = "display_date") var displayDate: String,
     @ColumnInfo(name = "class_number") var classNumber: Int
 )
@@ -16,6 +17,9 @@ data class Schedule(
 interface ScheduleDao {
     @Query("SELECT * FROM schedule")
     fun getAll(): List<Schedule>
+
+    @Query("SELECT * FROM schedule WHERE id LIKE :id LIMIT 1")
+    fun findByName(id: Long): Schedule
 
     @Query("SELECT * FROM schedule WHERE name LIKE :name LIMIT 1")
     fun findByName(name: String): Schedule

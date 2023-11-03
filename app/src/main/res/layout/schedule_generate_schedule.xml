@@ -23,7 +23,6 @@
 
         <TextView
             android:id="@+id/setting_title"
-            android:text="@string/setting_add_schedule"
             style="@style/TimetableSettingTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +37,7 @@
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/transparent"
         android:layout_marginTop="10dp"
-        android:hint="@string/request_subject_name"
+        android:hint="@string/request_input_subject_name"
         android:textSize="22dp"
         android:ellipsize="start"
         android:singleLine="true"

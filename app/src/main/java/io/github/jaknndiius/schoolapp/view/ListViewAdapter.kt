@@ -10,9 +10,12 @@ abstract class ListViewAdapter<T>: BaseAdapter() {
     private var listViewItemList = ArrayList<T>()
 
     fun getList() = listViewItemList.toList()
+    fun sortWith(comparator: Comparator<T>) = listViewItemList.sortWith(comparator)
+
     fun modifyItem(index: Int, value: T) { listViewItemList[index] = value }
-    fun removeItem(index: Int) { listViewItemList.removeAt(index) }
-    fun addItem(value: T) {listViewItemList.add(value)}
+    fun removeItem(index: Int) = listViewItemList.removeAt(index)
+    fun removeItem(item: T) = listViewItemList.remove(item)
+    fun addItem(value: T) = listViewItemList.add(value)
 
     override fun getCount(): Int {
         return listViewItemList.size

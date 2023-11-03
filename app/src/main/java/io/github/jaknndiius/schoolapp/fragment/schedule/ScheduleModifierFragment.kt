@@ -2,12 +2,14 @@ package io.github.jaknndiius.schoolapp.fragment.schedule
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import io.github.jaknndiius.schoolapp.MainActivity
 import io.github.jaknndiius.schoolapp.R
@@ -21,10 +23,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ScheduleGeneratorFragment(
-    private val scheduleFragment: ScheduleFragment
+class ScheduleModifierFragment(
+    private val scheduleFragment: ScheduleFragment,
+    private val schedule: Schedule
 ) : BackPressableFragment() {
 
     private lateinit var binding: View
@@ -36,7 +41,7 @@ class ScheduleGeneratorFragment(
         val detail =  binding.findViewById<EditText>(R.id.detail_eidttext).text.toString()
         if(title.isNotBlank() || detail.isNotBlank()) {
             AlertDialog.Builder(context)
-                .setMessage(R.string.ask_really_cancel_adding_schedule)
+                .setMessage(R.string.ask_really_cancel_modifying_schedule)
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     scheduleFragment.openScheduleList(Direction.PREVIOUS_VERTICAL)
                 }
@@ -46,6 +51,7 @@ class ScheduleGeneratorFragment(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,22 +59,30 @@ class ScheduleGeneratorFragment(
     ): View {
         binding = inflater.inflate(R.layout.schedule_generate_schedule, container, false)
 
-        binding.findViewById<TextView>(R.id.setting_title).setText(R.string.setting_add_schedule)
+        binding.findViewById<TextView>(R.id.setting_title).setText(R.string.setting_modifying_schedule)
 
         binding.findViewById<Button>(R.id.back_button).setOnClickListener {
             onPressBack()
         }
 
         val titleView = binding.findViewById<EditText>(R.id.schedule_title)
-        val detailView = binding.findViewById<EditText>(R.id.detail_eidttext)
+        titleView.setText(schedule.name)
 
+        val detailView = binding.findViewById<EditText>(R.id.detail_eidttext)
+        detailView.setText(schedule.detail
+        )
         val numberPicker = binding.findViewById<NumberPicker>(R.id.number_picker).apply {
             minValue = 0
             maxValue = MAX_CLASS_NUMBER -1
-            value = 0
+            value = schedule.classNumber -1
             displayedValues = (1..MAX_CLASS_NUMBER).map { "${it}교시" }.toTypedArray()
         }
-        val datePicker = binding.findViewById<DatePicker>(R.id.date_picker)
+
+        val datePicker = binding.findViewById<DatePicker>(R.id.date_picker).apply {
+            schedule.date.toString().chunked(2).let {
+                updateDate((it[0] + it[1]).toInt(), it[2].toInt() -1, it[3].toInt())
+            }
+        }
 
         binding.findViewById<AppCompatButton>(R.id.cancel_button).apply {
             attachTouchAnimation(this)
@@ -93,14 +107,13 @@ class ScheduleGeneratorFragment(
 
                 CoroutineScope(Dispatchers.IO).launch {
 
-                    MainActivity.scheduleManager.add(
-                        Schedule(
-                            SimpleDateFormat("yyyyMMddHHmmss").format(Date()).toLong()
-                            , title, detail, date, displayDate, classNumber))
+                    MainActivity.scheduleManager.modify(
+                        Schedule(schedule.id, title, detail, date, displayDate, classNumber)
+                    )
 
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context,
-                            R.string.say_added_schedule,
+                            R.string.say_modified_schedule,
                             Toast.LENGTH_LONG).show()
                         scheduleFragment.openScheduleList(Direction.PREVIOUS_VERTICAL)
                     }

@@ -14,22 +14,25 @@ class ScheduleManager(
         return scheduleDao.getAll()
     }
 
-    fun get(name: String): Schedule {
-        return scheduleDao.getAll().first { it.name == name }
+    fun get(id: Long): Schedule {
+        return scheduleDao.getAll().first { it.id == id }
     }
 
-    fun isExist(name: String): Boolean {
-        return !scheduleDao.getAll().none { it.name == name }
+    private fun isExist(id: Long): Boolean {
+        return !scheduleDao.getAll().none { it.id == id }
     }
 
-    fun define(schedule: Schedule) {
-        if (isExist(schedule.name)) scheduleDao.updateSchedules(schedule)
-        else scheduleDao.insertAll(schedule)
+    fun add(schedule: Schedule) {
+        if(!isExist(schedule.id)) scheduleDao.insertAll(schedule)
     }
 
-    fun delete(name: String) {
-        if (!isExist(name)) return
-        scheduleDao.delete(get(name))
+    fun modify(schedule: Schedule) {
+        if(isExist(schedule.id)) scheduleDao.updateSchedules(schedule)
+    }
+
+    fun delete(id: Long) {
+        if (!isExist(id)) return
+        scheduleDao.delete(get(id))
     }
 
 }
