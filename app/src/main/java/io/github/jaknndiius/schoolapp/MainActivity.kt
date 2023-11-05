@@ -22,6 +22,8 @@ import io.github.jaknndiius.schoolapp.database.manager.SubjectTableManager
 import io.github.jaknndiius.schoolapp.preset.Direction
 import io.github.jaknndiius.schoolapp.fragment.*
 import io.github.jaknndiius.schoolapp.fragment.timetable.ListFragment
+import io.github.jaknndiius.schoolapp.notification.Alarm
+import io.github.jaknndiius.schoolapp.notification.Notification
 import io.github.jaknndiius.schoolapp.preset.RangeType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         lateinit var examTableManager: ExamTableManager
         lateinit var scheduleManager: ScheduleManager
         lateinit var photoManager: Photo
+        lateinit var notificationManager: Notification
+        lateinit var alarmManager: Alarm
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +58,9 @@ class MainActivity : AppCompatActivity() {
 
         loadDatabase()
         photoManager = Photo(this)
+        notificationManager = Notification(this)
+        alarmManager = Alarm(this)
+        alarmManager.alert()
 
         pager = findViewById(R.id.pager)
         adapter = Adapter(supportFragmentManager)
@@ -149,18 +156,6 @@ class MainActivity : AppCompatActivity() {
 
             subjectManager.define("창체", "장인석")
 
-            subjectManager.attachExam("영어1", ExamAttr(listOf(10,1)).apply {
-                ranges = listOf(RangeType.TEXTBOOK to "p1~21", RangeType.PAPER to "12장", RangeType.SUBBOOK to "P3~12", RangeType.OTHER to "수업 첨부 파일 확인수업 첨부 파일 확인수업 첨부 파일 확인수업 첨부 파일 확인")
-            })
-
-            subjectManager.attachExam("영어2", ExamAttr(listOf(10,1)).apply {
-                ranges = listOf(RangeType.TEXTBOOK to "범위는", RangeType.SUBBOOK to "부교재")
-            })
-
-            subjectManager.attachExam("독서3", ExamAttr(listOf(102,133)).apply {
-                ranges = listOf(RangeType.TEXTBOOK to "범위는", RangeType.PAPER to "학습지")
-            })
-
             subjectTableManager.addOrUpdate(WeekDay.MONDAY,
                 listOf("독서1", "영어2", "수학1", "창체", "수학2", "미술", "지구과학")
             )
@@ -177,12 +172,37 @@ class MainActivity : AppCompatActivity() {
                 listOf("영어1", "독서3", "영어2", "창체", "물리", "수학1", "미술")
             )
 
-            examTableManager.addOrUpdate("첫째날",
-                listOf("영어1", "독서3", "영어2")
-            )
+            subjectManager.define("확률과 통계", "-")
+            subjectManager.attachExam("확률과 통계", ExamAttr(listOf(18,4)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "p10~59, p74~76제외", RangeType.PAPER to "240문제")
+            })
 
-            examTableManager.addOrUpdate("둘째날",
-                listOf("독서2", "수학2", "지구과학", "지구과학")
+            examTableManager.addOrUpdate("첫째날(10.5 목)",
+                listOf("확률과 통계")
+            )
+            subjectManager.define("독서", "-")
+            subjectManager.attachExam("독서", ExamAttr(listOf(22,4)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "p74~79", RangeType.MOCK to "2021~2022년 2학년 3,6월", RangeType.MOCK to "2020년 이전 일부")
+            })
+            examTableManager.addOrUpdate("둘째날(10.6 금)",
+                listOf("독서")
+            )
+            subjectManager.define("미적분", "-")
+            subjectManager.attachExam("미적분", ExamAttr(listOf(16,4)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "p10~99", RangeType.PAPER to "100문제(46, 97 제외)")
+            })
+            subjectManager.attachExam("한국사", ExamAttr(listOf(20,3)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "p231~303(p294~297 제외)", RangeType.PAPER to "IV. p1~7")
+            })
+            examTableManager.addOrUpdate("셋째날(10.10 화)",
+                listOf("미적분", "한국사")
+            )
+            subjectManager.define("영어", "-")
+            subjectManager.attachExam("영어", ExamAttr(listOf(16,4)).apply {
+                ranges = listOf(RangeType.TEXTBOOK to "1과~3과", RangeType.SUBBOOK to "Unit 13~17, Mid-test(p100~107), 유형독해모의고사 4회(p168~173)", RangeType.MOCK to "9월 18~45번", RangeType.OTHER to "서술형은 수업시간에 다룬 지문만")
+            })
+            examTableManager.addOrUpdate("넷째날(10.11 수)",
+                listOf("영어")
             )
 
         }

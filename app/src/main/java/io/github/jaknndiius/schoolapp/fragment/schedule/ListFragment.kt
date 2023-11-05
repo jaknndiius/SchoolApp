@@ -1,8 +1,14 @@
 package io.github.jaknndiius.schoolapp.fragment.schedule
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.CombinedVibration
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -143,6 +149,7 @@ class ListFragment(
                 .show()
         }
 
+        @SuppressLint("ServiceCast")
         @RequiresApi(Build.VERSION_CODES.O)
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             return LayoutInflater.from(context).inflate(R.layout.schedule_list_element, parent, false).apply {
@@ -158,6 +165,11 @@ class ListFragment(
                 }
 
                 setOnLongClickListener {
+                    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                    if(Build.VERSION.SDK_INT >= 26) vibrator.vibrate(VibrationEffect.createOneShot(80, 50))
+                    else vibrator.vibrate(80)
+                    MainActivity.notificationManager.notify("알림", item.name, item.classNumber)
+
                     deleteSchedule(item)
                     false
                 }
